@@ -1,0 +1,5 @@
+S3method(rankhazardplot, coxph)
+S3method(rankhazardplot, cph)
+S3method(rankhazardplot, default)
+export(rankhazardplot)
+import(survival, stats, graphics)
