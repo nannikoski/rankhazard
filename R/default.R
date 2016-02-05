@@ -1,3 +1,5 @@
+#5.2.2016
+
 rankhazardplot <- function(...) UseMethod("rankhazardplot")
 
 

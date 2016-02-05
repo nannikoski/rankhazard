@@ -1,3 +1,5 @@
+#5.2.2016
+
 cph_CI <- function(cphobj, x, coefs, refpoints){
 
 # This function calculates predictions as a product of coefs and x, and
