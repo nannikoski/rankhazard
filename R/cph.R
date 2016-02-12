@@ -52,8 +52,8 @@ rankhazardplot.cph <- function (
         if(is.numeric(refpoints)){
             refs[1, select[change]] <- refpoints[change]
         }else{
-            refs[1, intersect(factors, select[change])] <- refpoints[is.element(select[change], intersect(factors, select[change]))]
-            refs[1, intersect(nonfactors, select[change])] <- as.numeric(refpoints[is.element(select[change], intersect(nonfactors, select[change]))])
+            refs[1, intersect(factors, select[change])] <- refpoints[is.element(select, intersect(factors, select[change]))]
+            refs[1, intersect(nonfactors, select[change])] <- as.numeric(refpoints[is.element(select, intersect(nonfactors, select[change]))])
         }
     }
 
