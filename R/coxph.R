@@ -1,5 +1,3 @@
-#5.2.2016
-
 rankhazardplot.coxph <- function (
     coxphobj, data = NULL, select = NULL, refpoints = NULL, 
     CI_level = 0.95, x_CI = NULL, confint = FALSE, legendtext = NULL, 

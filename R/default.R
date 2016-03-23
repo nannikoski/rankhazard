@@ -1,5 +1,3 @@
-#5.2.2016
-
 rankhazardplot <- function(...) UseMethod("rankhazardplot")
 
 
@@ -125,10 +123,12 @@ rankhazardplot.default <- function (
 
     ind <- NULL
     for(i in 1:m){
-        ordered <- order(x[, i], na.last = TRUE)
-        ind <- cbind(ind, ordered)   # ind is used later
+        #ordered <- order(x[, i], na.last = TRUE)
+        #ind <- cbind(ind, ordered)   # ind is used later
         A[i,] <- quantile(y[, i], probs = quantiles, na.rm = TRUE)
     }
+    ind <- apply(x, 2, order)
+    
     cat("Y-axis range: ", signif(c(miny, maxy), 3), "\n", "\n")
     if (identical(plottype, "hazard")) cat("Relative hazards for each covarite:", "\n")
     if (identical(plottype, "loghazard")) cat("Logarithm of the relative hazards for each covarite:", "\n")
