@@ -115,28 +115,32 @@ rankhazardplot.default <- function (
 
     if (is.null(yvalues)) yvalues <- yticks
     quantiles <- c(0, 0.25, 0.5, 0.75, 1)	
-
-### Output to console ####
-    A <-matrix(0, m, 5)
-    colnames(A) <- c("Min.", "1st Qu.", "Median" , "3rd Qu.", "Max.")
-    rownames(A) <- legendtext
-
-    ind <- NULL
-    for(i in 1:m){
-        #ordered <- order(x[, i], na.last = TRUE)
-        #ind <- cbind(ind, ordered)   # ind is used later
-        A[i,] <- quantile(y[, i], probs = quantiles, na.rm = TRUE)
-    }
     ind <- apply(x, 2, order)
-    
-    cat("Y-axis range: ", signif(c(miny, maxy), 3), "\n", "\n")
-    if (identical(plottype, "hazard")) cat("Relative hazards for each covarite:", "\n")
-    if (identical(plottype, "loghazard")) cat("Logarithm of the relative hazards for each covarite:", "\n")
-    print(signif(A, 3))
-###
-    
-    nasum <- colSums(is.na(x))			
 
+    nasum <- colSums(is.na(x))	
+###lisätty alkaa###
+    ranks <- x
+    y_ord <- y
+    na_sum <- colSums(is.na(x))
+#    browser()    
+    for(i in 1:m){
+      ranks[i] <- c(seq(0, 1, length = n - na_sum[i]), rep(NA, na_sum[i]))
+      y_ord[i] <- y[ind[,i],i]
+    }
+#    browser()
+    if (!is.null(confinterval)){
+      low_ci_ord <- low_ci
+      upp_ci_ord <- upp_ci
+
+      for(i in 1:m){
+        low_ci_ord[i] <- low_ci[ind[,i],i]
+        upp_ci_ord[i] <- upp_ci[ind[,i],i]
+      }
+    }
+    matplot(ranks, y_ord, type="l")
+    X11()
+###lisätty loppuu###
+    
     for (j in 1:m) {						
         nj <- n - nasum[j]					
         ranks <- seq(0, 1, length = nj)     # scales the values to [0,1]
@@ -147,17 +151,6 @@ rankhazardplot.default <- function (
               xlab = "", ylab = ylab, type = "n", col = col[j], 
               pch = pch[j], lwd = lwd[j], lty = lty[j], axes = FALSE, log = logvar, 
               ...)
-
-            axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
-            axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
-            axis(2, at = yvalues, labels = as.character(yvalues))    # marks values on y-axis
-	      box()	
-
-            if (reftick)    # eboldens the reference tick
-                axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
-
-            if (refline)    # draws the reference line
-                abline(h = reftickvalue,  col = refline.col, lty = refline.lty, lwd = refline.lwd)
         }			
     
         lines(ranks, y[ind[1:nj, j], j], col = col[j], lwd = lwd[j], lty = lty[j], ...)
@@ -176,7 +169,40 @@ rankhazardplot.default <- function (
             points(quantiles, upp_ci[ind[1:nj, j], j][places], col = col[j], pch = pch[j], cex = cex[j], bg = bg[j], lwd = pt.lwd[j],...)
         }
     }
+    axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
+    axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
+    axis(2, at = yvalues, labels = as.character(yvalues))    # marks values on y-axis
+    box()	
+    
+    if (reftick)    # eboldens the reference tick
+      axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
+    
+    if (refline)    # draws the reference line
+      abline(h = reftickvalue,  col = refline.col, lty = refline.lty, lwd = refline.lwd)   
+    
+    legend(legendlocation, legend = legendtext, col = col, lwd = lwd, 
+           pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
 
+    
+    ### Output to console ####
+    A <-matrix(0, m, 5)
+    colnames(A) <- c("Min.", "1st Qu.", "Median" , "3rd Qu.", "Max.")
+    rownames(A) <- legendtext
+    
+    for(i in 1:m){
+      #ordered <- order(x[, i], na.last = TRUE)
+      #ind <- cbind(ind, ordered)   # ind is used later
+      A[i,] <- quantile(y[, i], probs = quantiles, na.rm = TRUE)
+    }
+    
+    
+    cat("Y-axis range: ", signif(c(miny, maxy), 3), "\n", "\n")
+    if (identical(plottype, "hazard")) cat("Relative hazards for each covarite:", "\n")
+    if (identical(plottype, "loghazard")) cat("Logarithm of the relative hazards for each covarite:", "\n")
+    print(signif(A, 3))
+    ###
+    
+    
     if (!is.null(confinterval)){
 ### Output to console ####
         cat("\n")
@@ -201,8 +227,6 @@ rankhazardplot.default <- function (
 ###############
     }		
 
-    legend(legendlocation, legend = legendtext, col = col, lwd = lwd, 
-      pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
 
 }
 
