@@ -115,31 +115,54 @@ rankhazardplot.default <- function (
 
     if (is.null(yvalues)) yvalues <- yticks
     quantiles <- c(0, 0.25, 0.5, 0.75, 1)	
-    ind <- apply(x, 2, order)
+    ranks <- apply(x, 2, order) # ranks = ind (later)
 
-    nasum <- colSums(is.na(x))	
+	
 ###lisätty alkaa###
-    ranks <- x
+    scaleranks <- x
     y_ord <- y
+    rank_quantile <- matrix(ncol=m, nrow=5)
+    y_points <- matrix(ncol=m, nrow=5)
+    
     na_sum <- colSums(is.na(x))
-#    browser()    
+ 
     for(i in 1:m){
-      ranks[i] <- c(seq(0, 1, length = n - na_sum[i]), rep(NA, na_sum[i]))
-      y_ord[i] <- y[ind[,i],i]
+      scaleranks[i] <- c(seq(0, 1, length = n - na_sum[i]), rep(NA, na_sum[i]))
+      y_ord[i] <- y[ranks[,i],i]
+      rank_quantile[,i] <-quantile(1:(n - na_sum[i]), probs = quantiles)
+      y_points[,i] <- y_ord[,i][rank_quantile[,i]]
     }
-#    browser()
+
     if (!is.null(confinterval)){
       low_ci_ord <- low_ci
       upp_ci_ord <- upp_ci
 
       for(i in 1:m){
-        low_ci_ord[i] <- low_ci[ind[,i],i]
-        upp_ci_ord[i] <- upp_ci[ind[,i],i]
+        low_ci_ord[i] <- low_ci[ranks[,i],i]
+        upp_ci_ord[i] <- upp_ci[ranks[,i],i]
       }
     }
-    matplot(ranks, y_ord, type="l")
+    matplot(scaleranks, y_ord, type="l", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, xlab="", xaxt="n", yaxt = "n",
+            lty=lty, lwd=lwd, ...)
+    matpoints(quantiles, y_points, pch=pch)
+    
+    axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
+    axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
+    axis(2, at = yvalues, labels = as.character(yvalues))    # marks values on y-axis
+    
+    if (reftick)    # eboldens the reference tick
+      axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
+    
+    if (refline)    # draws the reference line
+      abline(h = reftickvalue,  col = refline.col, lty = refline.lty, lwd = refline.lwd)   
+    
+    legend(legendlocation, legend = legendtext, col = col, lwd = lwd, 
+           pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
+    
     X11()
 ###lisätty loppuu###
+    ind <- apply(x, 2, order)
+    nasum <- colSums(is.na(x))
     
     for (j in 1:m) {						
         nj <- n - nasum[j]					
