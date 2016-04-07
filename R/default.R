@@ -115,7 +115,7 @@ rankhazardplot.default <- function (
 
     if (is.null(yvalues)) yvalues <- yticks
     quantiles <- c(0, 0.25, 0.5, 0.75, 1)	
-    ranks <- apply(x, 2, order) # ranks = ind (later)
+    orders <- apply(x, 2, order) # orders = ind (later)
 
 	
 ###lisätty alkaa###
@@ -128,7 +128,7 @@ rankhazardplot.default <- function (
  
     for(i in 1:m){
       scaleranks[i] <- c(seq(0, 1, length = n - na_sum[i]), rep(NA, na_sum[i]))
-      y_ord[i] <- y[ranks[,i],i]
+      y_ord[i] <- y[orders[,i],i]
       rank_quantile[,i] <-quantile(1:(n - na_sum[i]), probs = quantiles)
       y_points[,i] <- y_ord[,i][rank_quantile[,i]]
     }
@@ -138,13 +138,20 @@ rankhazardplot.default <- function (
       upp_ci_ord <- upp_ci
 
       for(i in 1:m){
-        low_ci_ord[i] <- low_ci[ranks[,i],i]
-        upp_ci_ord[i] <- upp_ci[ranks[,i],i]
+        low_ci_ord[i] <- low_ci[orders[,i],i]
+        upp_ci_ord[i] <- upp_ci[orders[,i],i]
       }
     }
     matplot(scaleranks, y_ord, type="l", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, xlab="", xaxt="n", yaxt = "n",
-            lty=lty, lwd=lwd, ...)
-    matpoints(quantiles, y_points, pch=pch)
+            col=col, lty=lty, lwd=lwd, ...)
+    matpoints(quantiles, y_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
+    
+    for(i in 1:m){
+      xlabels <- x[orders[rank_quantile[,i],i], i]    # quantiles for covariate i
+      if (is.numeric(xlabels)) xlabels <- signif(xlabels, 3) #rounds numeric labels
+      mtext(side = 1, at = c(axistextposition, quantiles),    
+            adj = c(1,rep(0.5, length(quantiles))), text = c(axistext[i], as.character(xlabels)), line = i)
+    }
     
     axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
     axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
