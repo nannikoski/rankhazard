@@ -117,7 +117,6 @@ rankhazardplot.default <- function (
     quantiles <- c(0, 0.25, 0.5, 0.75, 1)	
     orders <- apply(x, 2, order) # orders = ind (later)
 
-	
 ###lisätty alkaa###
     scaleranks <- x
     y_ord <- y
@@ -177,75 +176,21 @@ rankhazardplot.default <- function (
     legend(legendlocation, legend = legendtext, col = col, lwd = lwd, 
            pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
 
-    X11()
-###lisätty loppuu###
-    ind <- apply(x, 2, order)
-    nasum <- colSums(is.na(x))
-    
-    for (j in 1:m) {						
-        nj <- n - nasum[j]					
-        ranks <- seq(0, 1, length = nj)     # scales the values to [0,1]
-        places <- quantile(1:nj, probs = quantiles)    # quantiles of ranks
-	
-        if (j == 1) {
-            plot(1, 1, ylim = c(miny, maxy), xlim = c(0, 1), 
-              xlab = "", ylab = ylab, type = "n", col = col[j], 
-              pch = pch[j], lwd = lwd[j], lty = lty[j], axes = FALSE, log = logvar, 
-              ...)
-        }			
-    
-        lines(ranks, y[ind[1:nj, j], j], col = col[j], lwd = lwd[j], lty = lty[j], ...)
-        points(quantiles, y[ind[1:nj, j], j][places], col = col[j], pch = pch[j], cex = cex[j], bg = bg[j], lwd = pt.lwd[j], ...)
-
-        xlabels <- x[ind[places, j], j]    # quantiles for covariate j
-        if (is.numeric(xlabels)) xlabels <- signif(xlabels, 3)
-
-        mtext(side = 1, at = c(axistextposition, quantiles),    
-          adj = c(1,rep(0.5, length(quantiles))), text = c(axistext[j], as.character(xlabels)), line = j)
-    
-        if(!is.null(confinterval)) {
-            lines(ranks, low_ci[ind[1:nj, j], j], col = col[j], lwd = lwd[j], lty = lty[j] + 1, ...) #lower confidence interval
-            points(quantiles, low_ci[ind[1:nj, j], j][places], col = col[j], pch = pch[j], cex = cex[j], bg = bg[j], lwd = pt.lwd[j],...)
-            lines(ranks, upp_ci[ind[1:nj, j], j], col = col[j], lwd = lwd[j], lty = lty[j] + 1,...) #upper confidence interval
-            points(quantiles, upp_ci[ind[1:nj, j], j][places], col = col[j], pch = pch[j], cex = cex[j], bg = bg[j], lwd = pt.lwd[j],...)
-        }
-    }
-    axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
-    axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
-    axis(2, at = yvalues, labels = as.character(yvalues))    # marks values on y-axis
-    box()	
-    
-    if (reftick)    # eboldens the reference tick
-      axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
-    
-    if (refline)    # draws the reference line
-      abline(h = reftickvalue,  col = refline.col, lty = refline.lty, lwd = refline.lwd)   
-    
-    legend(legendlocation, legend = legendtext, col = col, lwd = lwd, 
-           pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
-
-    
     ### Output to console ####
     A <-matrix(0, m, 5)
     colnames(A) <- c("Min.", "1st Qu.", "Median" , "3rd Qu.", "Max.")
     rownames(A) <- legendtext
     
-    for(i in 1:m){
-      #ordered <- order(x[, i], na.last = TRUE)
-      #ind <- cbind(ind, ordered)   # ind is used later
+    for(i in 1:m)
       A[i,] <- quantile(y[, i], probs = quantiles, na.rm = TRUE)
-    }
-    
     
     cat("Y-axis range: ", signif(c(miny, maxy), 3), "\n", "\n")
     if (identical(plottype, "hazard")) cat("Relative hazards for each covarite:", "\n")
     if (identical(plottype, "loghazard")) cat("Logarithm of the relative hazards for each covarite:", "\n")
     print(signif(A, 3))
-    ###
-    
-    
+
     if (!is.null(confinterval)){
-### Output to console ####
+
         cat("\n")
         if (identical(plottype, "hazard")) 
             cat("Relative hazards for the confidence intervals of each covariate:", "\n")
@@ -258,11 +203,10 @@ rankhazardplot.default <- function (
         rownames(B)[2 * 1:m] <- upp_legend
         rownames(B)[2 * 1:m - 1] <- low_legend
 
-        for(i in 1:m)
+        for(i in 1:m){
             B[2 * i - 1,] <- quantile(low_ci[, i], probs = quantiles, na.rm = TRUE)
-
-        for(i in 1:m)
             B[2 * i,] <- quantile(upp_ci[, i], probs = quantiles, na.rm = TRUE)
+        }
     
         print(signif(B, 3))
 ###############
