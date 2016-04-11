@@ -9,7 +9,7 @@ rankhazardplot.default <- function (
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE,
     col = NULL, lwd = 1, lty = 1, pch = NULL, 
-    cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, ...)				
+    cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, ...)				
 {
     if(!is.null(confinterval)){
         x <- confinterval$x
@@ -50,11 +50,14 @@ rankhazardplot.default <- function (
     cex <- rep(cex, length.out = m)
     bg <- rep(bg, length.out = m)
     pt.lwd <- rep(pt.lwd, length.out = m)
+    
+    if (!add) graphsbefore = 0 #makes sure that 'graphsbefore' is only in use with 'add = TRUE'
 
-    if (is.null(pch)){pch <- seq(0, m - 1)} 		
+    if (is.null(pch)){pch <- seq(0, m - 1) + graphsbefore} 		
     else{pch <- rep(pch, length.out = m)}							
-    if (is.null(col)) {col <- 1:m }				
+    if (is.null(col)) {col <- 1:m + graphsbefore }				
     else{ col <- rep(col, length.out = m)	}	
+    
     if (is.null(legendtext) & !is.null(axistext)) 
         legendtext <- axistext	
     if (!is.null(legendtext) & is.null(axistext)) 
@@ -143,16 +146,16 @@ rankhazardplot.default <- function (
       upp_ci_points <- matrix(ncol=m, nrow=5)
       
       for(i in 1:m){
-        low_ci_ord[i] <- low_ci[orders[,i],i]
-        upp_ci_ord[i] <- upp_ci[orders[,i],i]
-        low_ci_points[,i] <- low_ci_ord[,i][rank_quantile[,i]]
-        upp_ci_points[,i] <- upp_ci_ord[,i][rank_quantile[,i]]
+        low_ci_ord[i] <- low_ci[orders[ , i], i]
+        upp_ci_ord[i] <- upp_ci[orders[ , i], i]
+        low_ci_points[ , i] <- low_ci_ord[ , i][rank_quantile[ , i]]
+        upp_ci_points[ , i] <- upp_ci_ord[ , i][rank_quantile[ , i]]
       }
      
-      matlines(scaleranks, low_ci_ord, type="l",col=col, lty=lty+1, lwd=lwd, ...) 
-      matlines(scaleranks, upp_ci_ord, type="l",col=col, lty=lty+1, lwd=lwd, ...) 
-      matpoints(quantiles, low_ci_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
-      matpoints(quantiles, upp_ci_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
+      matlines(scaleranks, low_ci_ord, type = "l",col = col, lty = lty + 1, lwd = lwd, add = add, ...) 
+      matlines(scaleranks, upp_ci_ord, type = "l",col = col, lty = lty + 1, lwd = lwd, add = add, ...) 
+      matpoints(quantiles, low_ci_points, pch = pch, col = col, cex = cex, bg = bg, lwd = pt.lwd)
+      matpoints(quantiles, upp_ci_points, pch = pch, col = col, cex = cex, bg = bg, lwd = pt.lwd)
       
     }
     
@@ -160,21 +163,23 @@ rankhazardplot.default <- function (
       xlabels <- x[orders[rank_quantile[,i],i], i]    # quantiles for covariate i
       if (is.numeric(xlabels)) xlabels <- signif(xlabels, 3) #rounds numeric labels
       mtext(side = 1, at = c(axistextposition, quantiles),    
-            adj = c(1,rep(0.5, length(quantiles))), text = c(axistext[i], as.character(xlabels)), line = i)
+            adj = c(1,rep(0.5, length(quantiles))), text = c(axistext[i], as.character(xlabels)), line = i + graphsbefore)
     }
     
-    axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
-    axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
-    axis(2, at = yvalues, labels = as.character(yvalues))    # marks values on y-axis
-    
-    if (reftick)    # eboldens the reference tick
-      axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
-    
-    if (refline)    # draws the reference line
-      abline(h = reftickvalue,  col = refline.col, lty = refline.lty, lwd = refline.lwd)   
-    
-    legend(legendlocation, legend = legendtext, col = col, lwd = lwd, 
-           pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
+    if (!add){
+      axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
+      axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
+      axis(2, at = yvalues, labels = as.character(yvalues))    # marks values on y-axis
+      
+      if (reftick)    # eboldens the reference tick
+        axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
+      
+      if (refline)    # draws the reference line
+        abline(h = reftickvalue,  col = refline.col, lty = refline.lty, lwd = refline.lwd)
+      
+      legend(legendlocation, legend = legendtext, col = col, lwd = lwd, 
+             pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
+    }
 
     ### Output to console ####
     A <-matrix(0, m, 5)
@@ -182,7 +187,7 @@ rankhazardplot.default <- function (
     rownames(A) <- legendtext
     
     for(i in 1:m)
-      A[i,] <- quantile(y[, i], probs = quantiles, na.rm = TRUE)
+      A[i,] <- quantile(y[, i], probs = quantiles, na.rm = TRUE) #osaako median ottaa quantiilit
     
     cat("Y-axis range: ", signif(c(miny, maxy), 3), "\n", "\n")
     if (identical(plottype, "hazard")) cat("Relative hazards for each covarite:", "\n")
