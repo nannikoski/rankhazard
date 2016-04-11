@@ -133,18 +133,29 @@ rankhazardplot.default <- function (
       y_points[,i] <- y_ord[,i][rank_quantile[,i]]
     }
 
-    if (!is.null(confinterval)){
-      low_ci_ord <- low_ci
-      upp_ci_ord <- upp_ci
-
-      for(i in 1:m){
-        low_ci_ord[i] <- low_ci[orders[,i],i]
-        upp_ci_ord[i] <- upp_ci[orders[,i],i]
-      }
-    }
     matplot(scaleranks, y_ord, type="l", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, xlab="", xaxt="n", yaxt = "n",
             col=col, lty=lty, lwd=lwd, ...)
     matpoints(quantiles, y_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
+    
+    if (!is.null(confinterval)){
+      low_ci_ord <- low_ci
+      upp_ci_ord <- upp_ci
+      low_ci_points <- matrix(ncol=m, nrow=5)
+      upp_ci_points <- matrix(ncol=m, nrow=5)
+      
+      for(i in 1:m){
+        low_ci_ord[i] <- low_ci[orders[,i],i]
+        upp_ci_ord[i] <- upp_ci[orders[,i],i]
+        low_ci_points[,i] <- low_ci_ord[,i][rank_quantile[,i]]
+        upp_ci_points[,i] <- upp_ci_ord[,i][rank_quantile[,i]]
+      }
+     
+      matlines(scaleranks, low_ci_ord, type="l",col=col, lty=lty+1, lwd=lwd, ...) 
+      matlines(scaleranks, upp_ci_ord, type="l",col=col, lty=lty+1, lwd=lwd, ...) 
+      matpoints(quantiles, low_ci_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
+      matpoints(quantiles, upp_ci_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
+      
+    }
     
     for(i in 1:m){
       xlabels <- x[orders[rank_quantile[,i],i], i]    # quantiles for covariate i
@@ -165,7 +176,7 @@ rankhazardplot.default <- function (
     
     legend(legendlocation, legend = legendtext, col = col, lwd = lwd, 
            pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
-    
+
     X11()
 ###lisätty loppuu###
     ind <- apply(x, 2, order)
