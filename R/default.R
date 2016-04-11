@@ -9,7 +9,7 @@ rankhazardplot.default <- function (
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE,
     col = NULL, lwd = 1, lty = 1, pch = NULL, 
-    cex = 1, bg = "transparent", pt.lwd = 1, ...)				
+    cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, ...)				
 {
     if(!is.null(confinterval)){
         x <- confinterval$x
@@ -133,7 +133,7 @@ rankhazardplot.default <- function (
     }
 
     matplot(scaleranks, y_ord, type="l", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, xlab="", xaxt="n", yaxt = "n",
-            col=col, lty=lty, lwd=lwd, ...)
+            col=col, lty=lty, lwd=lwd, add = add, ...)
     matpoints(quantiles, y_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
     
     if (!is.null(confinterval)){
