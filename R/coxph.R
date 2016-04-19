@@ -76,15 +76,8 @@ rankhazardplot.coxph <- function (
     refs[factors] <- 0
     refs <- as.vector(as.matrix(refs))
 
-    #coefslow <- confint(coxphobj, level = CI_level)[, 1]
-    #coefsupp <- confint(coxphobj, level = CI_level)[, 2]
-
     confinterval <- rankhazard_CI.coxph(coxphobj, x_CI, refs, CI_level)
-    #CIlow <- coxph_CI(coxphobj, x_CI,  coefslow, refs)
-    #CIupp <- coxph_CI(coxphobj, x_CI, coefsupp, refs)
 
-    #confinterval <- list(x = Values$x, xp = Values$xp, refvalues = Values$refvalues, low = CIlow$xp, lowrefvalues = CIlow$refvalues, upp = CIupp$xp, upprefvalues = CIupp$refvalues)
-    
     select_CI <- confinterval$select_CI
     selecttext <- select
 

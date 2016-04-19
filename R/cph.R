@@ -65,17 +65,11 @@ rankhazardplot.cph <- function (
 
 ### Calculating the confidence intervals ###
 
-    #coefslow <- confint(cphobj, level = CI_level)[, 1]
-    #coefsupp <- confint(cphobj, level = CI_level)[, 2]
-
     refs[factors] <- 0
     refs <- as.vector(as.matrix(refs))
 
     confinterval <- cph_CI(cphobj, x_CI, cphobj$coef, refs)
-    #CIlow <- cph_CI(cphobj, x_CI, coefslow, refs)
-    #CIupp <- cph_CI(cphobj, x_CI, coefsupp, refs)
-
-    #confinterval <- list(x = Values$x, xp = Values$xp, refvalues = Values$refvalues, low = CIlow$xp, lowrefvalues = CIlow$refvalues, upp = CIupp$xp, upprefvalues = CIupp$refvalues)
+    
     select_CI <- confinterval$select_CI
     selecttext <- select
 
