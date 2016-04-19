@@ -9,7 +9,7 @@ rankhazardplot.default <- function (
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE,
     col = NULL, lwd = 1, lty = 1, pch = NULL, 
-    cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, ...)				
+    cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, args.legend = NULL, ...)				
 {
     if(!is.null(confinterval)){
         x <- confinterval$x
@@ -152,8 +152,8 @@ rankhazardplot.default <- function (
         upp_ci_points[ , i] <- upp_ci_ord[ , i][rank_quantile[ , i]]
       }
      
-      matlines(scaleranks, low_ci_ord, type = "l",col = col, lty = lty + 1, lwd = lwd, add = add, ...) 
-      matlines(scaleranks, upp_ci_ord, type = "l",col = col, lty = lty + 1, lwd = lwd, add = add, ...) 
+      matlines(scaleranks, low_ci_ord, type = "l",col = col, lty = lty + 1, lwd = lwd, ...) 
+      matlines(scaleranks, upp_ci_ord, type = "l",col = col, lty = lty + 1, lwd = lwd, ...) 
       matpoints(quantiles, low_ci_points, pch = pch, col = col, cex = cex, bg = bg, lwd = pt.lwd)
       matpoints(quantiles, upp_ci_points, pch = pch, col = col, cex = cex, bg = bg, lwd = pt.lwd)
       
@@ -177,14 +177,22 @@ rankhazardplot.default <- function (
       if (refline)    # draws the reference line
         abline(h = reftickvalue,  col = refline.col, lty = refline.lty, lwd = refline.lwd)
       
-      legend(legendlocation, legend = legendtext, col = col, lwd = lwd, 
-             pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
+      if (is.null(args.legend)) {
+        legend(x = legendlocation, legend = legendtext, col = col, lwd = lwd, 
+               pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
+      }
+      else {
+        args.legend1 <- list(x = legendlocation, legend = legendtext, col = col, lwd = lwd, 
+                             pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
+        args.legend1[names(args.legend)] <- args.legend
+        do.call("legend", args.legend1)
+      }
     }
 
     ### Output to console ####
     A <-matrix(0, m, 5)
     colnames(A) <- c("Min.", "1st Qu.", "Median" , "3rd Qu.", "Max.")
-    rownames(A) <- legendtext
+    rownames(A) <- legendtext #virheilmoitus, jos antaa ylimääräisiä nimiä (aikoo lisätä ne muut kuvaajat)
     
     for(i in 1:m)
       A[i,] <- quantile(y[, i], probs = quantiles, na.rm = TRUE) #osaako median ottaa quantiilit

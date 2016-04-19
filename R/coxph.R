@@ -6,7 +6,7 @@ rankhazardplot.coxph <- function (
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE, draw = TRUE, 
     return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, 
-    cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, ...)		
+    cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, args.legend = NULL, ...)		
 {
     if (is.null(data)) 
         stop("Covariate data need to be provided as argument data.")
@@ -72,19 +72,20 @@ rankhazardplot.coxph <- function (
     xp <- as.data.frame(predictions)
 
 ### Calculating the confidence intervals ###
-
-    coefslow <- confint(coxphobj, level = CI_level)[, 1]
-    coefsupp <- confint(coxphobj, level = CI_level)[, 2]
-
+    
     refs[factors] <- 0
     refs <- as.vector(as.matrix(refs))
 
-    Values <- coxph_CI(coxphobj, x_CI, coxphobj$coef, refs)
-    CIlow <- coxph_CI(coxphobj, x_CI,  coefslow, refs)
-    CIupp <- coxph_CI(coxphobj, x_CI, coefsupp, refs)
+    #coefslow <- confint(coxphobj, level = CI_level)[, 1]
+    #coefsupp <- confint(coxphobj, level = CI_level)[, 2]
 
-    confinterval <- list(x = Values$x, xp = Values$xp, refvalues = Values$refvalues, low = CIlow$xp, lowrefvalues = CIlow$refvalues, upp = CIupp$xp, upprefvalues = CIupp$refvalues)
-    select_CI <- Values$select_CI
+    confinterval <- rankhazard_CI.coxph(coxphobj, x_CI, refs, CI_level)
+    #CIlow <- coxph_CI(coxphobj, x_CI,  coefslow, refs)
+    #CIupp <- coxph_CI(coxphobj, x_CI, coefsupp, refs)
+
+    #confinterval <- list(x = Values$x, xp = Values$xp, refvalues = Values$refvalues, low = CIlow$xp, lowrefvalues = CIlow$refvalues, upp = CIupp$xp, upprefvalues = CIupp$refvalues)
+    
+    select_CI <- confinterval$select_CI
     selecttext <- select
 
     if (confint){
@@ -118,7 +119,8 @@ rankhazardplot.coxph <- function (
             refline.lwd = refline.lwd, refline.lty = refline.lty, ylab = ylab, 
             ylim = ylim, yticks = yticks, yvalues = yvalues, plottype = plottype, 
             col = col, lwd = lwd, lty = lty, pch = pch, 
-            cex = cex, bg = bg, pt.lwd = pt.lwd, add = add, graphsbefore = graphsbefore, ...)
+            cex = cex, bg = bg, pt.lwd = pt.lwd, add = add, graphsbefore = graphsbefore, 
+            args.legend = args.legend, ...)
 
     if(return)
         return(list(x = x, xp = xp, refvalues = refvalues, confinterval = confinterval))
