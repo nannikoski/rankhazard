@@ -82,9 +82,8 @@ rankhazardplot.default <- function(
         low_ci <- low_ci[select]
     }
 
-    if (identical(plottype, "hazard")){}
+    if (identical(plottype, "hazard")){
         y <- exp(y)
-        
         if (!is.null(confinterval)){
           low_ci <- exp(low_ci) 
           upp_ci <- exp(upp_ci)  
@@ -92,11 +91,11 @@ rankhazardplot.default <- function(
     }
 
     yrange <- y    # makes sure that confidence intervals fit to the screen
-    if(!is.null(confinterval)){
+    if(!is.null(confinterval))
         yrange <- as.data.frame(c(y, low_ci, upp_ci))	 
-    }  
+    
 
-    if (length(ylim)!= 2){
+    if (length(ylim)!= 2){ #tätä voisi muokata
         maxy <- max(yrange, na.rm = TRUE)
         miny <- min(yrange, na.rm = TRUE) 
     }else{
@@ -107,23 +106,22 @@ rankhazardplot.default <- function(
     if (identical(plottype, "hazard")) {	
         if(is.null(ylab)) ylab <- "relative hazard"					
         if (is.null(yticks))
-            yticks <- c(pretty(c(miny, 1)), pretty(c(1, maxy)))	
+          yticks <- c(pretty(c(miny, 1)), pretty(c(1, maxy)))	
         reftickvalue <- 1
         logvar = "y"
     }    											
     if (identical(plottype, "loghazard")) {
         if(is.null(ylab)) ylab <- "logarithm of the relative hazard"										
         if (is.null(yticks))
-            yticks <- c(pretty(c(miny, 0)), pretty(c(0, maxy)))
+          yticks <- c(pretty(c(miny, 0)), pretty(c(0, maxy)))
         reftickvalue <- 0	
         logvar = ""
     }
 
     if (is.null(yvalues)) yvalues <- yticks
+    
     quantiles <- c(0, 0.25, 0.5, 0.75, 1)	
     orders <- apply(x, 2, order) 
-
-###lisätty alkaa###
     scaleranks <- x
     y_ord <- y
     rank_quantile <- matrix(ncol=m, nrow=5)
