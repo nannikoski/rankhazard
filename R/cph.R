@@ -67,8 +67,8 @@ rankhazardplot.cph <- function (
 
     refs[factors] <- 0
     refs <- as.vector(as.matrix(refs))
-
-    confinterval <- cph_CI(cphobj, x_CI, cphobj$coef, refs)
+    
+    confinterval <- rankhazard_CI.cph(cphobj, x_CI, refs, CI_level)
     
     select_CI <- confinterval$select_CI
     selecttext <- select

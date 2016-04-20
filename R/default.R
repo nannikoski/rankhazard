@@ -1,7 +1,8 @@
+#
+#
 rankhazardplot <- function(...) UseMethod("rankhazardplot")
 
-
-rankhazardplot.default <- function (
+rankhazardplot.default <- function(
     x, coefs = NULL, xp = NULL, refvalues = NULL, refpoints = NULL,
     confinterval = NULL, select = 1, legendtext = NULL, 
     axistext = NULL, legendlocation = "top", axistextposition = -0.1, 
@@ -190,41 +191,36 @@ rankhazardplot.default <- function (
     }
 
     ### Output to console ####
-    A <-matrix(0, m, 5)
-    colnames(A) <- c("Min.", "1st Qu.", "Median" , "3rd Qu.", "Max.")
-    rownames(A) <- legendtext #virheilmoitus, jos antaa ylimääräisiä nimiä (aikoo lisätä ne muut kuvaajat)
+    quantile_na.rm <- function(...) quantile(..., na.rm = TRUE, probs = quantiles)
     
-    for(i in 1:m)
-      A[i,] <- quantile(y[, i], probs = quantiles, na.rm = TRUE) #osaako median ottaa quantiilit
-    
+    rankhazard_quantiles <- t(apply(y, 2, quantile_na.rm))
+    colnames(rankhazard_quantiles) <- c("Min.", "1st Qu.", "Median" , "3rd Qu.", "Max.")
+    rownames(rankhazard_quantiles) <- legendtext[1:m]
+
     cat("Y-axis range: ", signif(c(miny, maxy), 3), "\n", "\n")
     if (identical(plottype, "hazard")) cat("Relative hazards for each covarite:", "\n")
     if (identical(plottype, "loghazard")) cat("Logarithm of the relative hazards for each covarite:", "\n")
-    print(signif(A, 3))
+    print(signif(rankhazard_quantiles, 3))
 
     if (!is.null(confinterval)){
+      
+      cat("\n")
+      if (identical(plottype, "hazard")) 
+        cat("Relative hazards for the confidence intervals of each covariate:", "\n")
+      if (identical(plottype, "loghazard")) 
+        cat("Logarithm of the relative hazards for the confidence intervals of each covariate:", "\n")
+      
+      rankhazard_CI_quantiles <- matrix(0, 2 * m, 5)
+      colnames(rankhazard_CI_quantiles) <- c("Min.", "1st Qu.", "Median" , "3rd Qu.", "Max.")
+      low_legend <- paste("Low", legendtext, sep = "_")
+      upp_legend <- paste("Upp", legendtext, sep = "_")
+      rownames(rankhazard_CI_quantiles)[2 * 1:m] <- upp_legend
+      rownames(rankhazard_CI_quantiles)[2 * 1:m - 1] <- low_legend
 
-        cat("\n")
-        if (identical(plottype, "hazard")) 
-            cat("Relative hazards for the confidence intervals of each covariate:", "\n")
-        if (identical(plottype, "loghazard")) 
-            cat("Logarithm of the relative hazards for the confidence intervals of each covariate:", "\n")
-        B <- matrix(0, 2 * m, 5)
-        colnames(B) <- c("Min.", "1st Qu.", "Median" , "3rd Qu.", "Max.")
-	  low_legend <- paste("Low", legendtext, sep = "_")
-	  upp_legend <- paste("Upp", legendtext, sep = "_")
-        rownames(B)[2 * 1:m] <- upp_legend
-        rownames(B)[2 * 1:m - 1] <- low_legend
-
-        for(i in 1:m){
-            B[2 * i - 1,] <- quantile(low_ci[, i], probs = quantiles, na.rm = TRUE)
-            B[2 * i,] <- quantile(upp_ci[, i], probs = quantiles, na.rm = TRUE)
-        }
-    
-        print(signif(B, 3))
-###############
+      rankhazard_CI_quantiles[2 * 1:m - 1, ] <- t(apply(low_ci, 2, quantile_na.rm))
+      rankhazard_CI_quantiles[2 * 1:m, ] <- t(apply(upp_ci, 2, quantile_na.rm))
+      
+      print(signif(rankhazard_CI_quantiles, 3))
+      ### Output ends ###
     }		
-
-
 }
-
