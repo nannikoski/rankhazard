@@ -82,13 +82,15 @@ rankhazardplot.default <- function(
         low_ci <- low_ci[select]
     }
 
-    if (identical(plottype, "hazard")){
+    if (identical(plottype, "hazard")){}
         y <- exp(y)
+        
+        if (!is.null(confinterval)){
+          low_ci <- exp(low_ci) 
+          upp_ci <- exp(upp_ci)  
+        }
     }
-    if (identical(plottype, "hazard") & !is.null(confinterval)){
-        low_ci <- exp(low_ci) 
-        upp_ci <- exp(upp_ci)
-    }
+
     yrange <- y    # makes sure that confidence intervals fit to the screen
     if(!is.null(confinterval)){
         yrange <- as.data.frame(c(y, low_ci, upp_ci))	 
@@ -119,7 +121,7 @@ rankhazardplot.default <- function(
 
     if (is.null(yvalues)) yvalues <- yticks
     quantiles <- c(0, 0.25, 0.5, 0.75, 1)	
-    orders <- apply(x, 2, order) # orders = ind (later)
+    orders <- apply(x, 2, order) 
 
 ###lisätty alkaa###
     scaleranks <- x
