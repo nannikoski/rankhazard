@@ -198,7 +198,7 @@ See documentation for \code{\link{par}}.  }
 If the vector is shorter than the number of the covariates to be plotted, the values are repeated.  
 See documentation for \code{\link{points}}.} 
 
- \item{bg}{A vector that defines the fill colour of the point.  Available only for point characters \code{21:25}.  
+ \item{bg}{A vector that defines the fill colour of the point.  Available only for point characters \code{21:25}.
 If the vector is shorter than the number of the covariates to be plotted, the values are repeated.  
 By default \code{"transparent"}.  
 See documentation for \code{\link{points}}.} 
@@ -211,7 +211,19 @@ See documentation for \code{lwd} in \code{\link{points}}.}
 If the vector is shorter than the number of covariates to be plotted, the values are repeated.  
 See documentation for \code{\link{plot.default}}.} 
 
- \item{\dots}{Other arguments to be passed to \code{\link{plot}} and \code{\link{lines}} commands.  
+ \item{add}{By default \code{FALSE} and a new plot is created.
+If \code{TRUE} graphs are added to the previous plot. In that case the amount of graphs already 
+plotted must be specified by the argument \code{graphsbefore}.
+ 
+ \item{graphsbefore}{A number that specifies how many graphs have already been drawn on the plot. 
+If add = \code{FALSE}, this argument can be ignored.}
+  
+ \item{args.legend}{A list of additional arguments to be passed to \code{\link{legend}}.
+Names of the list are used as argument names. The values are
+used when the legend is drawn. For example if \code{legend} and \code{x} are specified in the list, 
+those will replace the values of \code{legendtext} and \code{legendlocation} respectively.}
+
+ \item{\dots}{Other arguments to be passed to \code{\link{matplot}} and \code{\link{matlines}} commands.
 For example \code{main}.  }
 
 }
@@ -276,7 +288,8 @@ Calculated by \code{\link{predict.coxph}} or \code{predict.rms}.  }
 \item{confinterval}{A list that contains covariate data as a data frame \code{x}, predictions by terms as a data frame \code{xp},
 reference values as a vector \code{refvalues}, a lower confidence interval for the predictions as a data frame \code{low}, 
 a lower confidence interval for the reference values as a vector \code{lowrefvalues}, an upper confidence interval for the predictions
-as a data frame \code{upp} and an upper confidence interval for the reference values as a vector \code{upprefvalues}.  
+as a data frame \code{upp} and an upper confidence interval for the reference values as a vector \code{upprefvalues}. 
+In the list there is also the vector \code{select_CI} that has indices of the covariates in the model for which the confidence intervals are provided.
 
 The covariates for which the confidence intervals are provided are original (same as in the data), 
 simply transformed (e.g. \code{log}) and factors.  The predictions are calculated as 
