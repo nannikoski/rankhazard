@@ -213,7 +213,7 @@ See documentation for \code{\link{plot.default}}.}
 
  \item{add}{By default \code{FALSE} and a new plot is created.
 If \code{TRUE} graphs are added to the previous plot. In that case the amount of graphs already 
-plotted must be specified by the argument \code{graphsbefore}.
+plotted must be specified by the argument \code{graphsbefore}.}
  
  \item{graphsbefore}{A number that specifies how many graphs have already been drawn on the plot. 
 If add = \code{FALSE}, this argument can be ignored.}
@@ -302,7 +302,7 @@ NB: values aren't centered and for that reason e.g. \code{xp} and \code{confinte
 \references{Karvanen J., Harrell F. E., Jr. 2009 Visualizing covariates in proportional hazards model. 
 \emph{Statistics in Medicine}, \bold{28}, 1957--1966.}
 %%%%%%%%%%%%%%%
-\author{Juha Karvanen <juha.karvanen@iki.fi>, Nanni Koski}
+\author{Juha Karvanen <juha.karvanen@iki.fi>, Nanni Koski <nanni.koski@gmail.com>}
 %%%%%%%%%%%%%%%
 \seealso{ \code{\link{coxph}},  \code{cph},\code{\link{predict.coxph}}, \code{predict.rms} }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
