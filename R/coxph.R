@@ -11,7 +11,7 @@ rankhazardplot.coxph <- function (
     if (is.null(data)) 
         stop("Covariate data need to be provided as argument data.")
 
-    if (is.null(coxphobj$x) & is.null(x_CI))
+    if (!is.matrix(coxphobj$x) & is.null(x_CI))
         stop("To calculate confidence intevals covariate data need to be provided either as argument x_CI or as coxphobj$x.")
 
     if (is.null(x_CI))
