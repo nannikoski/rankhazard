@@ -1,4 +1,4 @@
-rankhazard_CI.default <- function(modelobj, x, refpoints, factorlevels, covariatelabs, coefs){
+rankhazard_CI <- function(modelobj, x, refpoints, factorlevels, covariatelabs, coefs){
   
   # This function calculates predictions as a product of coefs and x, and
   # reference values as a product of coefs and refvalues.
