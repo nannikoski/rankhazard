@@ -21,7 +21,8 @@ rankhazardplot(...)
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE, draw = TRUE, 
     return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, 
-    cex = 1, bg = "transparent", pt.lwd = 1, ...)
+    cex = 1, bg = "transparent", pt.lwd = 1, 
+    add = FALSE, graphsbefore = 0, args.legend = NULL, ...)
 
 \method{rankhazardplot}{cph}(cphobj, data, select = NULL, refpoints = NULL, 
     CI_level = 0.95, x_CI = NULL, confint = FALSE, legendtext = NULL, 
@@ -30,7 +31,8 @@ rankhazardplot(...)
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE, draw = TRUE, 
     return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, 
-    cex = 1, bg = "transparent", pt.lwd = 1, ...)
+    cex = 1, bg = "transparent", pt.lwd = 1, 
+    add = FALSE, graphsbefore = 0, args.legend = NULL, ...)
 
 \method{rankhazardplot}{default}(x, coefs = NULL, xp = NULL, refvalues = NULL, 
     refpoints = NULL, confinterval = NULL, select = 1, legendtext = NULL, 
@@ -39,7 +41,8 @@ rankhazardplot(...)
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE,
     col = NULL, lwd = 1, lty = 1, pch = NULL, 
-    cex = 1, bg = "transparent", pt.lwd = 1, ...)
+    cex = 1, bg = "transparent", pt.lwd = 1, 
+    add = FALSE, graphsbefore = 0, args.legend = NULL, ...)
 
 }
 
