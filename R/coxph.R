@@ -61,10 +61,8 @@ rankhazardplot.coxph <- function (
         }
     }
 
-    newdata <- x
-    predictions <- predict(coxphobj, type = "terms", newdata = newdata)
-    newdata <- refs
-    pred_refvalues <- predict(coxphobj, type = "terms", newdata = newdata)
+    predictions <- predict(coxphobj, type = "terms", newdata = x)
+    pred_refvalues <- predict(coxphobj, type = "terms", newdata = refs)
 
     refvalues <- as.vector(pred_refvalues)
     names(refvalues) <- attr(pred_refvalues, "dimnames")[[2]]
