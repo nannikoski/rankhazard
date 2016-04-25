@@ -8,8 +8,8 @@ rankhazardplot.coxph <- function (
     return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE,
     cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, args.legend = NULL, ...)		
 {
-    if (is.null(data)) 
-        stop("Covariate data need to be provided as argument data.")
+  if (!is.data.frame(data)) 
+    stop("Covariate data need to be provided as a data frame by the argument data.")
 
     if (!is.matrix(coxphobj$x) & is.null(x_CI))
         stop("To calculate confidence intevals covariate data need to be provided either as argument x_CI or as coxphobj$x.")
@@ -21,6 +21,9 @@ rankhazardplot.coxph <- function (
 
     if (is.null(select))
         select <- 1:length(term_labels)
+    if (max(select) > length(term_labels))
+      stop("There are fewer covariates in the model than selected.")
+    
 
     trans_var <- which(!is.element(term_labels, names(data)))	# checks which term labels are different as in the data
     # changes the labels of the transformed variables to get the same as in the data

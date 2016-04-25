@@ -8,8 +8,8 @@ rankhazardplot.cph <- function (
     return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE,
     cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, args.legend = NULL,  ...)					
 {
-    if (is.null(data)) 
-        stop("Covariate data need to be provided as argument data.")
+    if (!is.data.frame(data)) 
+        stop("Covariate data need to be provided as a data frame by the argument data.")
 
     if (is.null(cphobj$x) & is.null(x_CI))
         stop("To calculate confidence intevals covariate data need to be provided either as argument x_CI or as cphobj$x.")
@@ -20,7 +20,9 @@ rankhazardplot.cph <- function (
     term_labels <- cphobj$Design$name 
 
     if (is.null(select))
-        select <- 1:length(term_labels)
+      select <- 1:length(term_labels)
+    if (max(select) > length(term_labels))
+      stop("There are fewer covariates in the model than selected.")
 
     data_labels <- term_labels						
 

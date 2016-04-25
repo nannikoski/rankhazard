@@ -221,7 +221,7 @@ If \code{TRUE} graphs are added to the previous plot. In that case the amount of
 plotted must be specified by the argument \code{graphsbefore}.}
  
  \item{graphsbefore}{A number that specifies how many graphs have already been drawn on the plot. 
-If add = \code{FALSE}, this argument can be ignored.}
+If \code{add} = \code{FALSE}, this argument can be ignored.}
   
  \item{args.legend}{A list of additional arguments to be passed to \code{\link{legend}}.
 Names of the list are used as argument names. The values are
