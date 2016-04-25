@@ -9,9 +9,11 @@ rankhazardplot.default <- function(
     reftick = TRUE, refline = FALSE, refline.col = 1, refline.lwd = 1, 
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE,
-    col = NULL, lwd = 1, lty = 1, pch = NULL, 
+    col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE,
     cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, args.legend = NULL, ...)				
 {
+  if (add && graphsbefore == 0) stop("When 'add = TRUE' the amount of already drawn graphs must be given by 'graphsbefore'.")
+
     if(!is.null(confinterval)){
         x <- confinterval$x
         if (na.rm) x <- na.omit(x)
@@ -29,7 +31,7 @@ rankhazardplot.default <- function(
     m <- dim(x)[2]	# number of covariates
 
     if (!identical(plottype, "hazard") & !identical(plottype, "loghazard")) 		
-        stop("Unknown plottype")
+        stop("'plottype' must be  'hazard' or 'loghazard'")
     if (is.null(xp) & is.null(coefs)) 					
         stop("Either coefs or xp must be provided.")		
     if (is.null(refvalues) & !is.null(xp)) 				
@@ -137,7 +139,7 @@ rankhazardplot.default <- function(
     }
 
     matplot(scaleranks, y_ord, type="l", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, xlab="", xaxt="n", yaxt = "n",
-            col=col, lty=lty, lwd=lwd, add = add, ...)
+            col=col, lty=lty, lwd=lwd, add = add, axes = axes, ...)
     matpoints(quantiles, y_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
     
     if (!is.null(confinterval)){
@@ -168,9 +170,12 @@ rankhazardplot.default <- function(
     }
     
     if (!add){
-      axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
-      axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
-      axis(2, at = yvalues, labels = as.character(yvalues))    # marks values on y-axis
+      
+      if (axes){
+        axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
+        axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
+        axis(2, at = yvalues, labels = as.character(yvalues))    # marks values on y-axis
+      }
       
       if (reftick)    # eboldens the reference tick
         axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)

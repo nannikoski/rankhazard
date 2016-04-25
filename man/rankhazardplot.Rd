@@ -15,22 +15,22 @@ for each covariate of a Cox proportional hazards model fitted by \code{\link{cox
 rankhazardplot(...)
 
 \method{rankhazardplot}{coxph}(coxphobj, data, select = NULL, refpoints = NULL, 
-    CI_level = 0.95, x_CI = NULL, confint = FALSE, legendtext = NULL, 
+    CI_level = 0.95, x_CI = NULL, draw.confint = FALSE, legendtext = NULL, 
     axistext = NULL, legendlocation = "top", axistextposition = -0.1, 
     reftick = TRUE, refline = FALSE, refline.col = 1, refline.lwd = 1, 
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE, draw = TRUE, 
-    return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, 
+    return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE, 
     cex = 1, bg = "transparent", pt.lwd = 1, 
     add = FALSE, graphsbefore = 0, args.legend = NULL, ...)
 
 \method{rankhazardplot}{cph}(cphobj, data, select = NULL, refpoints = NULL, 
-    CI_level = 0.95, x_CI = NULL, confint = FALSE, legendtext = NULL, 
+    CI_level = 0.95, x_CI = NULL, draw.confint = FALSE, legendtext = NULL, 
     axistext = NULL, legendlocation = "top", axistextposition = -0.1, 
     reftick = TRUE, refline = FALSE, refline.col = 1, refline.lwd = 1, 
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE, draw = TRUE, 
-    return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, 
+    return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE, 
     cex = 1, bg = "transparent", pt.lwd = 1, 
     add = FALSE, graphsbefore = 0, args.legend = NULL, ...)
 
@@ -40,7 +40,7 @@ rankhazardplot(...)
     reftick = TRUE, refline = FALSE, refline.col = 1, refline.lwd = 1, 
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE,
-    col = NULL, lwd = 1, lty = 1, pch = NULL, 
+    col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE, 
     cex = 1, bg = "transparent", pt.lwd = 1, 
     add = FALSE, graphsbefore = 0, args.legend = NULL, ...)
 
@@ -57,7 +57,7 @@ The object should have been created with the option \code{x = TRUE}.  Otherwise 
 
  \item{data}{A data frame that contains the covariates in the model.  
 It can be the data used in fitting the Cox proportional hazards model or new data.  
-It can contain more covariates than what there are in the model.  
+It can contain more covariates than there are in the model.  
 Used with the argument \code{coxphobj} or \code{cphobj}.  }
 
  \item{select}{A vector with the order numbers of the covariates to be plotted.  
@@ -69,7 +69,7 @@ With \code{confinterval} the default is the first covariate.  }
 \item{x}{A data frame that contains the covariates to be plotted with one column for each covariate.  
 Used with the argument \code{xp} or \code{coefs}.   
 When used with \code{xp}, \code{x} defines the values to be printed on the x-axis.  
-When used with \code{coefs}, \code{x} the predictions are computed as
+When used with \code{coefs}, \code{x} the predictions are computed
 as a product of \code{coefs} and \code{x}.  
 The dimensions of \code{x} and \code{xp} must be the same.  
 The number of covariates given in \code{x} and the length of the \code{coefs} must be the same.   
@@ -107,14 +107,14 @@ Needed if the \code{coxphobj$x} or \code{cphobj$x} does not exist.
 The number and the order of the columns must be same as \code{as.data.frame(coxphobj$x)} 
 or \code{as.data.frame(cphobj$x)}.  }
  
- \item{confint}{If \code{TRUE} the confidence intervals are plotted.  
+ \item{draw.confint}{If \code{TRUE} the confidence intervals are plotted.  
 Can be used with \code{coxphobj} or \code{cphobj}.  
 By default \code{FALSE}.  }
 
  \item{confinterval}{A list that contains all information to plot confidence intervals.  
 If \code{return = TRUE} \code{confinterval} is returned in the list.  See section \code{Value}.  } 
  
- \item{legendtext}{A vector of covariate names for the legend box.  
+ \item{legendtext}{A vector of covariate names for the legend box and the summary.  
 If \code{NULL} and \code{axistext = NULL}, the names are from the columns of \code{xp}, \code{coefs}, 
 \code{attr(coxphobj$terms,"term.labels")} or \code{attr(cphobj$terms, "term.labels")}.  
 If \code{NULL}, \code{axistext} is used if it is given.  
@@ -155,7 +155,7 @@ See documentation for \code{\link{par}}.  }
  \item{ylab}{A string that defines the label of the y-axis.  When \code{plottype = "hazard"} the default is "relative hazard".  
 When \code{plottype = "loghazard"} the default is the "logarithm of the relative hazard".  See documentation for \code{\link{plot}}.  } 
 
- \item{ylim}{A vector that defines the range of the y-axis.  
+ \item{ylim}{A numerical vector that defines the range of the y-axis.  
 By default the range is the minimum and the maximum of (the logarithm of) the relative hazards.  
 See documentation for \code{\link{plot.window}}.  } 
 
@@ -168,6 +168,8 @@ If \code{NULL} the ticks are computed using \code{\link{pretty}}.  }
 If \code{NULL} the values of the \code{yticks} are used.  
 It is recommended that 1 is in the \code{yvalues} if the \code{plottype = "hazard"} and 0 if the \code{plottype = "loghazard"}.  
 In addition to this the \code{yvalues} should be a subset of \code{yticks}.  } 
+
+ \item{axes}{By default \code{TRUE} and the axes are plotted. If \code{FALSE} axes are not plotted.}
 
  \item{plottype}{A string that defines the scale for the y-axis. 
 Either \code{"hazard"} for the relative hazard with log-scale or 

@@ -1,11 +1,11 @@
 rankhazardplot.cph <- function (
     cphobj, data = NULL, select = NULL, refpoints = NULL, 
-    CI_level = 0.95, x_CI = NULL, confint = FALSE, legendtext = NULL, 
+    CI_level = 0.95, x_CI = NULL, draw.confint = FALSE, legendtext = NULL, 
     axistext = NULL, legendlocation = "top", axistextposition = -0.1, 
     reftick = TRUE, refline = FALSE, refline.col = 1, refline.lwd = 1, 
     refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
     yvalues = NULL, plottype = "hazard", na.rm = TRUE, draw = TRUE, 
-    return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, 
+    return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE,
     cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, args.legend = NULL,  ...)					
 {
     if (is.null(data)) 
@@ -73,7 +73,7 @@ rankhazardplot.cph <- function (
     select_CI <- confinterval$select_CI
     selecttext <- select
 
-    if (confint){
+    if (draw.confint){
         CI <- confinterval
         select <- which(is.element(select_CI, select))
         selecttext <- select_CI[select]
@@ -103,7 +103,7 @@ rankhazardplot.cph <- function (
             reftick = reftick, refline = refline, refline.col = refline.col, 
             refline.lwd = refline.lwd, refline.lty = refline.lty, ylab = ylab, 
             ylim = ylim, yticks = yticks, yvalues = yvalues, plottype = plottype, 
-            col = col, lwd = lwd, lty = lty, pch = pch, 
+            col = col, lwd = lwd, lty = lty, pch = pch, axes = axes,
             cex = cex, bg = bg, pt.lwd = pt.lwd, add = add, graphsbefore = graphsbefore,
             args.legend = args.legend, ...)
 
