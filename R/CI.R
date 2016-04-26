@@ -37,7 +37,7 @@ rankhazard_CI <- function(modelobj, x, refpoints, factorlevels, covariatelabs, c
   } 
   
   #the factors in the model are coerced as factors in x
-  
+
   j <- 1
   for(i in factors) {
     xfactor <- as.factor(x[, factorlabs[j]])

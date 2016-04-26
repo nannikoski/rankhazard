@@ -12,41 +12,55 @@ rankhazardplot.default <- function(
     col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE,
     cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, args.legend = NULL, ...)				
 {
-  if (add && graphsbefore == 0) stop("When 'add = TRUE' the amount of already drawn graphs must be given by 'graphsbefore'.")
-
-    if(!is.null(confinterval)){
-        x <- confinterval$x
-        if (na.rm) x <- na.omit(x)
-        x <- confinterval$x[select]
-        xp <- confinterval$xp
-        if (na.rm) xp <- na.omit(xp)
-        xp <- confinterval$xp[select]
-        refvalues <- confinterval$refvalues[select]
-    }
-
+  if (!identical(plottype, "hazard") && !identical(plottype, "loghazard")) 		
+    stop("'plottype' must be  'hazard' or 'loghazard'")
+  if (add && graphsbefore == 0) 
+    stop("When 'add = TRUE' the amount of already drawn graphs must be given by 'graphsbefore'.")
+  
+  if(!is.null(confinterval)){
+    ##tähän testejä
+    x <- confinterval$x
     if (na.rm) x <- na.omit(x)
-    if (na.rm & !is.null(xp)) xp <- na.omit(xp)
+    x <- confinterval$x[select]
+    xp <- confinterval$xp
+    if (na.rm) xp <- na.omit(xp)
+    xp <- confinterval$xp[select]
+    refvalues <- confinterval$refvalues[select]
+  }
 
-    n <- dim(x)[1]	# number of observations
-    m <- dim(x)[2]	# number of covariates
+  if (!is.data.frame(x)) stop("'x' must be a data frame.") 
+  if (na.rm) x <- na.omit(x)
+  
+  n <- dim(x)[1]	# number of observations
+  m <- dim(x)[2]	# number of covariates
+  
+  if (!is.null(coefs) && m != length(coefs)) 
+    stop ("The length of the vector 'coefs' must be the same as the number of columns in 'x'.")
+  
+  if (!is.null(refpoints) && !is.null(refvalues)) 
+    stop("Only one of the arguments 'refpoints' and 'refvalues' can be in use at the same time.")
+  
+  if (!is.null(xp)){
+    if (!is.null(coefs)) stop("Only one of the arguments 'coefs' and 'xp' can be in use at the same time.")
+    if (!is.data.frame(xp)) stop("'xp' must be a data frame.") 
+    if (is.null(refvalues)) stop("When 'xp' is given, also 'refvalues' are required.")	
+    if (na.rm) xp <- na.omit(xp)  
+    if (!identical(dim(xp),dim(x))) stop("The dimensions of 'xp' and 'x' must be the same.") 
+    if (m != length(refvalues)) stop("The length of the vector 'refvalues' must be the same as the number of columns in 'xp'.")
+  }else{
+    if (is.null(coefs)) stop("Either 'coefs' or 'xp' must be provided.")
+    if (!is.null(refvalues)) stop("'refvalues' can only be used with 'xp'.")
+    xp <- as.data.frame(t(coefs * t(x))) 
+  }
 
-    if (!identical(plottype, "hazard") & !identical(plottype, "loghazard")) 		
-        stop("'plottype' must be  'hazard' or 'loghazard'")
-    if (is.null(xp) & is.null(coefs)) 					
-        stop("Either coefs or xp must be provided.")		
-    if (is.null(refvalues) & !is.null(xp)) 				
-        stop("When xp is given, also refvalues are required.")	
 
-    if(is.null(refvalues) & is.null(refpoints)){	
-        refpoints <- apply(x, 2, median, na.rm = TRUE)	
-        refvalues <- coefs*refpoints
-    }
+  if(is.null(refvalues)){	
+    if (is.null(refpoints)) refpoints <- apply(x, 2, median, na.rm = TRUE)	
+    if (m != length(refpoints)) stop("The length of the vector 'refpoints' must be the same as the number of columns in 'x'.")
+    refvalues <- coefs*refpoints
+  }
 
-    if(is.null(refvalues) & !is.null(refpoints))	
-        refvalues <- coefs*refpoints
 
-    if (is.null(xp)) 
-        xp <- as.data.frame(t(coefs * t(x))) 
 
     lwd <- rep(lwd, length.out = m)
     lty <- rep(lty, length.out = m)

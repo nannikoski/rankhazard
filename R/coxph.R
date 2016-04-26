@@ -14,8 +14,8 @@ rankhazardplot.coxph <- function (
     if (!is.matrix(coxphobj$x) & is.null(x_CI))
         stop("To calculate confidence intevals covariate data need to be provided either as argument x_CI or as coxphobj$x.")
 
-    if (is.null(x_CI))
-        x_CI <- as.data.frame(coxphobj$x)
+    if (is.null(x_CI)) x_CI <- as.data.frame(coxphobj$x)
+    if (!is.data.frame(x_CI)) stop("'x_CI' must be a data frame.")
  
     term_labels <- attr(coxphobj$terms, "term.labels")
 
@@ -77,6 +77,7 @@ rankhazardplot.coxph <- function (
     refs[factors] <- 0
     refs <- as.vector(as.matrix(refs))
 
+    if (CI_level <= 0 || 1 <= CI_level) stop ("'CI_level' must be a number between 0 and 1.")
     confinterval <- rankhazard_CI.coxph(coxphobj, x_CI, refs, CI_level)
 
     select_CI <- confinterval$select_CI
