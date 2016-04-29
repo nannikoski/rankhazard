@@ -53,20 +53,19 @@ rankhazardplot.default <- function(
     xp <- as.data.frame(t(coefs * t(x))) 
   }
 
-
   if(is.null(refvalues)){	
     if (is.null(refpoints)) refpoints <- apply(x, 2, median, na.rm = TRUE)	
     if (m != length(refpoints)) stop("The length of the vector 'refpoints' must be the same as the number of columns in 'x'.")
     refvalues <- coefs*refpoints
   }
 
-
-
-    lwd <- rep(lwd, length.out = m)
-    lty <- rep(lty, length.out = m)
-    cex <- rep(cex, length.out = m)
-    bg <- rep(bg, length.out = m)
-    pt.lwd <- rep(pt.lwd, length.out = m)
+  if (!is.numeric(lwd)) warning("'lwd' must be numeric.")
+  lwd <- rep(lwd, length.out = m)
+  lty <- rep(lty, length.out = m)
+  cex <- rep(cex, length.out = m)
+  bg <- rep(bg, length.out = m)
+  if (!is.numeric(pt.lwd)) warning("'pt.lwd' must be numeric.")
+  pt.lwd <- rep(pt.lwd, length.out = m)
     
     if (!add) graphsbefore = 0 #makes sure that 'graphsbefore' is only in use with 'add = TRUE'
 
@@ -110,7 +109,6 @@ rankhazardplot.default <- function(
     if(!is.null(confinterval))
         yrange <- as.data.frame(c(y, low_ci, upp_ci))	 
     
-
     if (length(ylim)!= 2){ #tätä voisi muokata
         maxy <- max(yrange, na.rm = TRUE)
         miny <- min(yrange, na.rm = TRUE) 
@@ -189,11 +187,11 @@ rankhazardplot.default <- function(
         axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
         axis(2, at = yticks, labels = FALSE)    # marks ticks on y-axis
         axis(2, at = yvalues, labels = as.character(yvalues))    # marks values on y-axis
+        
+        if (reftick)    # eboldens the reference tick
+          axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
       }
-      
-      if (reftick)    # eboldens the reference tick
-        axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
-      
+
       if (refline)    # draws the reference line
         abline(h = reftickvalue,  col = refline.col, lty = refline.lty, lwd = refline.lwd)
       

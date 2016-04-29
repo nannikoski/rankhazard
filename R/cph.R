@@ -48,7 +48,19 @@ rankhazardplot.cph <- function (
     }
 
     if(!is.null(refpoints)){
+      if(length(refpoints) != length(select)) 
+        stop("The length of 'refpoints' must be the same as the number of covariates to be plotted.")
         change <- which(!is.na(refpoints))
+        # testi että ei-faktoreilla on numeeriset refpointit
+        if (!is.numeric(refpoints[intersect(select[change], nonfactors)])) warning("'refpoints' must be numeric for variables which are not factors")
+        # testi että faktorien refpointit kuuluu faktorin leveleihin
+        j <- 1
+        for (i in factors){
+          if (is.element(i, select[change]))
+            if (!is.element(refpoints[which(select == i)], factorlevels[[j]])) 
+              warning(paste("The given value in 'refpoints' for factor", factorlabs[j], "is not one of the levels of the factor."))
+          j <- j + 1
+        } 
         if(is.numeric(refpoints)){
             refs[1, select[change]] <- refpoints[change]
         }else{

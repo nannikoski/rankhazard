@@ -127,7 +127,7 @@ If \code{NULL}, \code{legendtext} is used if it is given.
 If the \code{select} argument is in use the names are given for the selected covariates only 
 and in the same order as the selection made.  }
 
- \item{legendlocation}{A keyword that determines the location where the legend box is printed.  By default "top".  
+ \item{legendlocation}{A keyword that determines the location where the legend box is printed.  By default "top".
 See \code{Details} in the documentation for \code{\link{legend}}.  
 If \code{NULL}, the legend box is not printed and it can be added by function \code{\link{legend}}.} 
 
@@ -169,7 +169,7 @@ If \code{NULL} the values of the \code{yticks} are used.
 It is recommended that 1 is in the \code{yvalues} if the \code{plottype = "hazard"} and 0 if the \code{plottype = "loghazard"}.  
 In addition to this the \code{yvalues} should be a subset of \code{yticks}.  } 
 
- \item{axes}{By default \code{TRUE} and the axes are plotted. If \code{FALSE} axes are not plotted.}
+ \item{axes}{By default \code{TRUE} and the axes are plotted. If \code{FALSE} axes are not plotted. NOTE when adding the axes yourself: On the rank-hazard plot the x-axis is from 0 to 1 and the places for quartiles are 0.25, 0.5 and 0.75. }
 
  \item{plottype}{A string that defines the scale for the y-axis. 
 Either \code{"hazard"} for the relative hazard with log-scale or 
