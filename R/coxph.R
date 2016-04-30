@@ -58,8 +58,9 @@ rankhazardplot.coxph <- function (
        stop("The length of 'refpoints' must be the same as the number of covariates to be plotted.")
      change <- which(!is.na(refpoints))
      # testi että ei-faktoreilla on numeeriset refpointit
-     if (!is.numeric(refpoints[intersect(select[change], nonfactors)])) warning("'refpoints' must be numeric for variables which are not factors")
-     # testi että faktorien refpointit kuuluu faktorin leveleihin
+#browser()
+     if (any(is.na(as.numeric(refpoints[intersect(select[change], nonfactors)])))) warning("'refpoints' must be numeric for variables which are not factors")
+# testi että faktorien refpointit kuuluu faktorin leveleihin
      j <- 1
      for (i in factors){
        if (is.element(i, select[change]))

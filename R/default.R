@@ -15,7 +15,7 @@ rankhazardplot.default <- function(
   if (!identical(plottype, "hazard") && !identical(plottype, "loghazard")) 		
     stop("'plottype' must be  'hazard' or 'loghazard'")
   if (add && graphsbefore == 0) 
-    stop("When 'add = TRUE' the amount of already drawn graphs must be given by 'graphsbefore'.")
+    stop("When 'add = TRUE' the amount of already drawn graphs must be given by 'graphsbefore'.") #vaihda warning?
   
   if(!is.null(confinterval)){
     ##tähän testejä
@@ -66,8 +66,8 @@ rankhazardplot.default <- function(
   bg <- rep(bg, length.out = m)
   if (!is.numeric(pt.lwd)) warning("'pt.lwd' must be numeric.")
   pt.lwd <- rep(pt.lwd, length.out = m)
-    
-    if (!add) graphsbefore = 0 #makes sure that 'graphsbefore' is only in use with 'add = TRUE'
+  
+  if (!add && graphsbefore != 0)  warning("'graphsbefore' is not zero even though a new plot is drawn.")
 
     if (is.null(pch)){pch <- seq(0, m - 1) + graphsbefore} 		
     else{pch <- rep(pch, length.out = m)}							

@@ -221,7 +221,7 @@ If \code{TRUE} graphs are added to the previous plot. In that case the amount of
 plotted must be specified by the argument \code{graphsbefore}.}
  
  \item{graphsbefore}{A number that specifies how many graphs have already been drawn on the plot. 
-If \code{add} = \code{FALSE}, this argument can be ignored.}
+If \code{add} = \code{FALSE}, the default is 0. See \code{Details} for more information.}
   
  \item{args.legend}{A list of additional arguments to be passed to \code{\link{legend}}.
 Names of the list are used as argument names. The values are
@@ -251,7 +251,9 @@ The labels on the x-axis show the minimum, the quartiles and the maximum of each
 If the quantile would be determined by a mean of two observations, the smaller value is choosed to be the quantile.
 However, if the number of the obervations is even, the default reference point is not necessarily a real observation 
 as it is calculated as a mean of two middle observations.  Hence, the median shown on the x-axis and the reference point 
-can differ even when the default is used.
+can differ even when the default is used. 
+
+If the labels on the x-axis should be altered in some way (e.g. \code{font} or \code{cex}) the printing of the labels must be prevented by giving the \code{graphsbefore} argument a value so high that the labels are printed outside the plot. The \code{graphsbefore} + 1 is the first row that the labels are printed on, therefore if there are three lines space below the plot, any value greater or equal than three will prevent the labels from printing on the plot. After that the labels can be added by \code{mtext}.
 
 Predictions are computed by \code{\link{predict.coxph}}, when the function is called with the argument \code{coxphobj} 
 and by \code{predict.rms}, when the function is called with the argument \code{cphobj}.  
