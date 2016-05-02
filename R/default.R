@@ -4,7 +4,7 @@ rankhazardplot <- function(...) UseMethod("rankhazardplot")
 
 rankhazardplot.default <- function(
     x, coefs = NULL, xp = NULL, refvalues = NULL, refpoints = NULL,
-    confinterval = NULL, select = 1, legendtext = NULL, 
+    confinterval = NULL, select = 1, legendtext = NULL, draw.confint = NULL, 
     axistext = NULL, legendlocation = "top", axistextposition = -0.1, 
     reftick = TRUE, refline = FALSE, col.refline = 1, lwd.refline = 1, 
     lty.refline = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
@@ -15,11 +15,12 @@ rankhazardplot.default <- function(
 {
   if (!identical(plottype, "hazard") && !identical(plottype, "loghazard")) 		
     stop("'plottype' must be  'hazard' or 'loghazard'")
+  if (!is.numeric(graphsbefore) || graphsbefore < 0) warning("'graphsbefore' must be a non-negative integer.")
   if (add && graphsbefore == 0) 
-    stop("When 'add = TRUE' the amount of already drawn graphs must be given by 'graphsbefore'.") #vaihda warning?
+    warning("When 'add = TRUE' the amount of already drawn graphs must be given by 'graphsbefore'.") #vaihda warning?
+  if(!is.null(draw.confint)) warning("'draw.confint can't be used without model object.")
   
   if(!is.null(confinterval)){
-    ##tähän testejä
     x <- confinterval$x
     if (na.rm) x <- na.omit(x)
     x <- confinterval$x[select]
@@ -60,20 +61,22 @@ rankhazardplot.default <- function(
     refvalues <- coefs*refpoints
   }
 
-  if (!is.numeric(lwd)) warning("'lwd' must be numeric.")
+  if (!is.numeric(lwd) || lwd < 0) warning("'lwd' must be a positive number.")
   lwd <- rep(lwd, length.out = m)
   lty <- rep(lty, length.out = m)
   cex <- rep(cex, length.out = m)
   bg <- rep(bg, length.out = m)
-  if (!is.numeric(pt.lwd)) warning("'pt.lwd' must be numeric.")
+  if (!is.numeric(pt.lwd)|| pt.lwd < 0) warning("'pt.lwd' must be a positive number.")
   pt.lwd <- rep(pt.lwd, length.out = m)
   
   if (!add && graphsbefore != 0)  warning("'graphsbefore' is not zero even though a new plot is drawn.")
-
+#browser()
     if (is.null(pch)){pch <- seq(0, m - 1) + graphsbefore} 		
     else{pch <- rep(pch, length.out = m)}							
     if (is.null(col)) {col <- 1:m + graphsbefore }				
     else{ col <- rep(col, length.out = m)	}	
+  
+    if(is.null(col.CI)) col.CI <- col
     
     if (is.null(legendtext) & !is.null(axistext)) 
         legendtext <- axistext	
@@ -87,7 +90,11 @@ rankhazardplot.default <- function(
         axistext <- colnames(x)			
     if (is.null(axistext)) 
         axistext <- legendtext
-
+  
+  if (length(axistext) != m) warning("The length of the vector 'axistext' differs from the number of covariates to be drawn.")
+  if (length(legendtext) != m) warning("The length of the vector 'legendtext' differs from the number of covariates to be drawn.")
+  
+  
     ones <- matrix(1, nrow = n, ncol = 1)	
     y <- xp - ones %*% refvalues
 
@@ -111,6 +118,7 @@ rankhazardplot.default <- function(
         yrange <- as.data.frame(c(y, low_ci, upp_ci))	 
     
     if (length(ylim)!= 2){ #tätä voisi muokata
+      if (!is.null(ylim)) warning("The length of 'ylim' differs from two and the default is used.")
         maxy <- max(yrange, na.rm = TRUE)
         miny <- min(yrange, na.rm = TRUE) 
     }else{
@@ -168,13 +176,12 @@ rankhazardplot.default <- function(
         upp_ci_points[ , i] <- upp_ci_ord[ , i][rank_quantile[ , i]]
       }
       
-      if (!is.numeric(lwd.CI)) warning("'lwd.CI' must be numeric.")
-      
+      if (!is.numeric(lwd.CI) || lwd.CI < 0) warning("'lwd.CI' must be a positive number.")
+#browser()      
       matlines(x = scaleranks, y = low_ci_ord, type = "l", col = col.CI, lty = lty.CI, lwd = lwd.CI, ...) 
       matlines(x = scaleranks, y = upp_ci_ord, type = "l", col = col.CI, lty = lty.CI, lwd = lwd.CI, ...) 
       matpoints(quantiles, low_ci_points, pch = pch, col = col.CI, cex = cex, bg = bg, lwd = pt.lwd)
       matpoints(quantiles, upp_ci_points, pch = pch, col = col.CI, cex = cex, bg = bg, lwd = pt.lwd)
-      
     }
     
     if (xtext){
@@ -185,7 +192,6 @@ rankhazardplot.default <- function(
               adj = c(1,rep(0.5, length(quantiles))), text = c(axistext[i], as.character(xlabels)), line = i + graphsbefore)
       }
     }
-
     
     if (!add){
       
@@ -211,6 +217,7 @@ rankhazardplot.default <- function(
       else {
         args.legend1 <- list(x = legendlocation, legend = legendtext, col = col, lwd = lwd, 
                              pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
+        if (!identical(class(args.legend), "list")) warning("The class of 'args.legend' should be list.")
         args.legend1[names(args.legend)] <- args.legend
         do.call("legend", args.legend1)
       }

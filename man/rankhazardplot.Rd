@@ -175,7 +175,7 @@ If \code{NULL} the values of the \code{yticks} are used.
 It is recommended that 1 is in the \code{yvalues} if the \code{plottype = "hazard"} and 0 if the \code{plottype = "loghazard"}.  
 In addition to this the \code{yvalues} should be a subset of \code{yticks}.  } 
 
-\item{xtext} {By default \code{TRUE} and the labels and the quartiles of the covariates are printed on the x-axis. If the text on the x-axis should be altered in some way (e.g. \code{font} or \code{cex}) the printing of the labels must be prevented by giving \code{xtext = FALSE}. After that the labels can be added by \code{mtext}}
+\item{xtext}{By default \code{TRUE} and the labels and the quartiles of the covariates are printed on the x-axis. If the text on the x-axis should be altered in some way (e.g. \code{font} or \code{cex}) the printing of the labels must be prevented by giving \code{xtext = FALSE}. After that the labels can be added by \code{mtext}}
 
  \item{axes}{By default \code{TRUE} and the axes are plotted. If \code{FALSE} axes are not plotted. NOTE when adding the axes yourself: On the rank-hazard plot the x-axis is from 0 to 1 and the places for quartiles are 0.25, 0.5 and 0.75. }
 

@@ -115,12 +115,12 @@ rankhazardplot.coxph <- function (
       legendtext <- term_labels[selecttext]
       axistext <- data_labels[selecttext]			
     }
-
+#browser()
     if (draw)
       rankhazardplot.default( 						
         x = x[select], xp = xp[select], refvalues = refvalues[select], 					
         legendtext = legendtext, axistext = axistext,
-        na.rm = na.rm, select = select, confinterval = CI, 
+        na.rm = na.rm, select = select, confinterval = CI, draw.confint = NULL,  
         legendlocation = legendlocation, axistextposition = axistextposition, 
         reftick = reftick, refline = refline, col.refline = col.refline, 
         lwd.refline = lwd.refline, lty.refline = lty.refline, ylab = ylab, 

@@ -10,10 +10,10 @@ rankhazardplot.cph <- function (
     col.CI = col, lty.CI = lty +1, lwd.CI = lwd, add = FALSE, graphsbefore = 0, args.legend = NULL,  ...)					
 {
     if (!is.data.frame(data)) 
-        stop("Covariate data need to be provided as a data frame by the argument data.")
+        stop("Covariate data need to be provided as a data frame by the argument 'data'.")
 
     if (is.null(cphobj$x) & is.null(x_CI))
-        stop("To calculate confidence intevals covariate data need to be provided either as argument x_CI or as cphobj$x.")
+        stop("To calculate confidence intevals covariate data need to be provided either as argument 'x_CI' or as 'cphobj$x'.")
 
     if (is.null(x_CI)) x_CI <- as.data.frame(cphobj$x)
     if (!is.data.frame(x_CI)) stop("'x_CI' must be a data frame.")
@@ -114,7 +114,7 @@ rankhazardplot.cph <- function (
         rankhazardplot.default( 						
             x = x[select], xp = xp[select], refvalues = refvalues[select], 					
             legendtext = legendtext, axistext = axistext,
-            na.rm = na.rm, select = select, confinterval = CI, 
+            na.rm = na.rm, select = select, confinterval = CI, draw.confint = NULL,
             legendlocation = legendlocation, axistextposition = axistextposition, 
             reftick = reftick, refline = refline, col.refline = col.refline, 
             lwd.refline = lwd.refline, lty.refline = lty.refline, ylab = ylab, 
