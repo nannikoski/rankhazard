@@ -101,11 +101,17 @@ If \code{return = TRUE} \code{refvalues} is returned in the list.  See section \
 
  \item{CI_level}{A number between 0 and 1 that defines the level of the confidence interval 
 for (the logarithm of) the relative hazard. By default 0.95.} 
- 
+
  \item{x_CI}{A data frame of the covariate data.  
 Needed if the \code{coxphobj$x} or \code{cphobj$x} does not exist.  
 The number and the order of the columns must be same as \code{as.data.frame(coxphobj$x)} 
 or \code{as.data.frame(cphobj$x)}.  }
+
+\item{col.CI}{Defines the colour of the graph of confidence intervals.  By default the same as colour of the relative hazard.See documentation for \code{\link{par}}.  }
+
+\item{lty.CI}{Defines the type of the graph of confidence intervals.  By default \code{lty + 1}.See documentation for \code{\link{par}}.  }
+
+\item{lwd.CI}{Defines the width of the graph of confidence intervals.  By default the same as width of the relative hazard.See documentation for \code{\link{par}}.  }
  
  \item{draw.confint}{If \code{TRUE} the confidence intervals are plotted.  
 Can be used with \code{coxphobj} or \code{cphobj}.  
@@ -143,13 +149,13 @@ For the relative hazard the tick is at 1 and for the logarithm of the relative h
 at the same place as the reference tick (see \code{reftick}).  
 By default \code{FALSE}.  } 
 
- \item{refline.col}{Defines the colour of the reference line, if \code{refline = TRUE}.  By default 1.  
+ \item{col.refline}{Defines the colour of the reference line, if \code{refline = TRUE}.  By default 1.  
 See documentation for \code{\link{par}}.  } 
 
- \item{refline.lwd}{Defines the width of the reference line, if \code{refline = TRUE}.  By default 1.  
+ \item{lwd.refline}{Defines the width of the reference line, if \code{refline = TRUE}.  By default 1.  
 See documentation for \code{\link{par}}.  } 
 
- \item{refline.lty}{Defines the type of the reference line, if \code{refline = TRUE}.  By default 2.  
+ \item{lty.refline}{Defines the type of the reference line, if \code{refline = TRUE}.  By default 2.  
 See documentation for \code{\link{par}}.  } 
 
  \item{ylab}{A string that defines the label of the y-axis.  When \code{plottype = "hazard"} the default is "relative hazard".  
@@ -168,6 +174,8 @@ If \code{NULL} the ticks are computed using \code{\link{pretty}}.  }
 If \code{NULL} the values of the \code{yticks} are used.  
 It is recommended that 1 is in the \code{yvalues} if the \code{plottype = "hazard"} and 0 if the \code{plottype = "loghazard"}.  
 In addition to this the \code{yvalues} should be a subset of \code{yticks}.  } 
+
+\item{xtext} {By default \code{TRUE} and the labels and the quartiles of the covariates are printed on the x-axis. If the text on the x-axis should be altered in some way (e.g. \code{font} or \code{cex}) the printing of the labels must be prevented by giving \code{xtext = FALSE}. After that the labels can be added by \code{mtext}}
 
  \item{axes}{By default \code{TRUE} and the axes are plotted. If \code{FALSE} axes are not plotted. NOTE when adding the axes yourself: On the rank-hazard plot the x-axis is from 0 to 1 and the places for quartiles are 0.25, 0.5 and 0.75. }
 
@@ -200,8 +208,7 @@ If the vector is shorter than the number of the covariates to be plotted, the va
 See documentation for \code{\link{par}}.  } 
 
  \item{pch}{A vector that defines the characters of the points.  
-If the vector is shorter than the number of the covariates to be plotted, the values are repeated.  
-See documentation for \code{\link{points}}.} 
+If the vector is shorter than the number of the covariates to be plotted, the values are repeated. If the value is \code{NA} the points are not plotted. See documentation for \code{\link{points}}.} 
 
  \item{bg}{A vector that defines the fill colour of the point.  Available only for point characters \code{21:25}.
 If the vector is shorter than the number of the covariates to be plotted, the values are repeated.  
@@ -221,7 +228,7 @@ If \code{TRUE} graphs are added to the previous plot. In that case the amount of
 plotted must be specified by the argument \code{graphsbefore}.}
  
  \item{graphsbefore}{A number that specifies how many graphs have already been drawn on the plot. 
-If \code{add} = \code{FALSE}, the default is 0. See \code{Details} for more information.}
+If \code{add} = \code{FALSE}, the default is 0.}
   
  \item{args.legend}{A list of additional arguments to be passed to \code{\link{legend}}.
 Names of the list are used as argument names. The values are
@@ -229,7 +236,7 @@ used when the legend is drawn. For example if \code{legend} and \code{x} are spe
 those will replace the values of \code{legendtext} and \code{legendlocation} respectively.}
 
  \item{\dots}{Other arguments to be passed to \code{\link{matplot}} and \code{\link{matlines}} commands.
-For example \code{main}.  }
+For example \code{main}. Arguments that are already in use are \code{x}, \code{y}, \code{type}, \code{log}, \code{xlim}, \code{xlab}, \code{xaxt} and \code{yaxt} and using them will give an error.}
 
 }
 
@@ -252,8 +259,6 @@ If the quantile would be determined by a mean of two observations, the smaller v
 However, if the number of the obervations is even, the default reference point is not necessarily a real observation 
 as it is calculated as a mean of two middle observations.  Hence, the median shown on the x-axis and the reference point 
 can differ even when the default is used. 
-
-If the labels on the x-axis should be altered in some way (e.g. \code{font} or \code{cex}) the printing of the labels must be prevented by giving the \code{graphsbefore} argument a value so high that the labels are printed outside the plot. The \code{graphsbefore} + 1 is the first row that the labels are printed on, therefore if there are three lines space below the plot, any value greater or equal than three will prevent the labels from printing on the plot. After that the labels can be added by \code{mtext}.
 
 Predictions are computed by \code{\link{predict.coxph}}, when the function is called with the argument \code{coxphobj} 
 and by \code{predict.rms}, when the function is called with the argument \code{cphobj}.  

@@ -2,11 +2,12 @@ rankhazardplot.cph <- function (
     cphobj, data = NULL, select = NULL, refpoints = NULL, 
     CI_level = 0.95, x_CI = NULL, draw.confint = FALSE, legendtext = NULL, 
     axistext = NULL, legendlocation = "top", axistextposition = -0.1, 
-    reftick = TRUE, refline = FALSE, refline.col = 1, refline.lwd = 1, 
-    refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
-    yvalues = NULL, plottype = "hazard", na.rm = TRUE, draw = TRUE, 
+    reftick = TRUE, refline = FALSE, col.refline = 1, lwd.refline = 1, 
+    lty.refline = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
+    yvalues = NULL, xtext =TRUE, plottype = "hazard", na.rm = TRUE, draw = TRUE, 
     return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE,
-    cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, args.legend = NULL,  ...)					
+    cex = 1, bg = "transparent", pt.lwd = 1, 
+    col.CI = col, lty.CI = lty +1, lwd.CI = lwd, add = FALSE, graphsbefore = 0, args.legend = NULL,  ...)					
 {
     if (!is.data.frame(data)) 
         stop("Covariate data need to be provided as a data frame by the argument data.")
@@ -115,11 +116,12 @@ rankhazardplot.cph <- function (
             legendtext = legendtext, axistext = axistext,
             na.rm = na.rm, select = select, confinterval = CI, 
             legendlocation = legendlocation, axistextposition = axistextposition, 
-            reftick = reftick, refline = refline, refline.col = refline.col, 
-            refline.lwd = refline.lwd, refline.lty = refline.lty, ylab = ylab, 
-            ylim = ylim, yticks = yticks, yvalues = yvalues, plottype = plottype, 
+            reftick = reftick, refline = refline, col.refline = col.refline, 
+            lwd.refline = lwd.refline, lty.refline = lty.refline, ylab = ylab, 
+            ylim = ylim, yticks = yticks, yvalues = yvalues, xtext =xtext, plottype = plottype, 
             col = col, lwd = lwd, lty = lty, pch = pch, axes = axes,
-            cex = cex, bg = bg, pt.lwd = pt.lwd, add = add, graphsbefore = graphsbefore,
+            cex = cex, bg = bg, pt.lwd = pt.lwd, 
+            col.CI = col.CI, lwd.CI = lwd.CI, lty.CI = lty.CI, add = add, graphsbefore = graphsbefore,
             args.legend = args.legend, ...)
 
     if (return)

@@ -6,11 +6,12 @@ rankhazardplot.default <- function(
     x, coefs = NULL, xp = NULL, refvalues = NULL, refpoints = NULL,
     confinterval = NULL, select = 1, legendtext = NULL, 
     axistext = NULL, legendlocation = "top", axistextposition = -0.1, 
-    reftick = TRUE, refline = FALSE, refline.col = 1, refline.lwd = 1, 
-    refline.lty = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
-    yvalues = NULL, plottype = "hazard", na.rm = TRUE,
+    reftick = TRUE, refline = FALSE, col.refline = 1, lwd.refline = 1, 
+    lty.refline = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
+    yvalues = NULL, xtext =TRUE,  plottype = "hazard", na.rm = TRUE,
     col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE,
-    cex = 1, bg = "transparent", pt.lwd = 1, add = FALSE, graphsbefore = 0, args.legend = NULL, ...)				
+    cex = 1, bg = "transparent", pt.lwd = 1, 
+    col.CI = col, lty.CI = lty +1, lwd.CI = lwd, add = FALSE, graphsbefore = 0, args.legend = NULL, ...)				
 {
   if (!identical(plottype, "hazard") && !identical(plottype, "loghazard")) 		
     stop("'plottype' must be  'hazard' or 'loghazard'")
@@ -150,7 +151,7 @@ rankhazardplot.default <- function(
       y_points[,i] <- y_ord[,i][rank_quantile[,i]]
     }
 
-    matplot(scaleranks, y_ord, type="l", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, xlab="", xaxt="n", yaxt = "n",
+    matplot(x = scaleranks, y = y_ord, type="l", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, xlab="", xaxt="n", yaxt = "n",
             col=col, lty=lty, lwd=lwd, add = add, axes = axes, ...)
     matpoints(quantiles, y_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
     
@@ -166,20 +167,25 @@ rankhazardplot.default <- function(
         low_ci_points[ , i] <- low_ci_ord[ , i][rank_quantile[ , i]]
         upp_ci_points[ , i] <- upp_ci_ord[ , i][rank_quantile[ , i]]
       }
-     
-      matlines(scaleranks, low_ci_ord, type = "l",col = col, lty = lty + 1, lwd = lwd, ...) 
-      matlines(scaleranks, upp_ci_ord, type = "l",col = col, lty = lty + 1, lwd = lwd, ...) 
-      matpoints(quantiles, low_ci_points, pch = pch, col = col, cex = cex, bg = bg, lwd = pt.lwd)
-      matpoints(quantiles, upp_ci_points, pch = pch, col = col, cex = cex, bg = bg, lwd = pt.lwd)
+      
+      if (!is.numeric(lwd.CI)) warning("'lwd.CI' must be numeric.")
+      
+      matlines(x = scaleranks, y = low_ci_ord, type = "l", col = col.CI, lty = lty.CI, lwd = lwd.CI, ...) 
+      matlines(x = scaleranks, y = upp_ci_ord, type = "l", col = col.CI, lty = lty.CI, lwd = lwd.CI, ...) 
+      matpoints(quantiles, low_ci_points, pch = pch, col = col.CI, cex = cex, bg = bg, lwd = pt.lwd)
+      matpoints(quantiles, upp_ci_points, pch = pch, col = col.CI, cex = cex, bg = bg, lwd = pt.lwd)
       
     }
     
-    for(i in 1:m){
-      xlabels <- x[orders[rank_quantile[,i],i], i]    # quantiles for covariate i
-      if (is.numeric(xlabels)) xlabels <- signif(xlabels, 3) #rounds numeric labels
-      mtext(side = 1, at = c(axistextposition, quantiles),    
-            adj = c(1,rep(0.5, length(quantiles))), text = c(axistext[i], as.character(xlabels)), line = i + graphsbefore)
+    if (xtext){
+      for(i in 1:m){
+        xlabels <- x[orders[rank_quantile[,i],i], i]    # quantiles for covariate i
+        if (is.numeric(xlabels)) xlabels <- signif(xlabels, 3) #rounds numeric labels
+        mtext(side = 1, at = c(axistextposition, quantiles),    
+              adj = c(1,rep(0.5, length(quantiles))), text = c(axistext[i], as.character(xlabels)), line = i + graphsbefore)
+      }
     }
+
     
     if (!add){
       
@@ -192,9 +198,12 @@ rankhazardplot.default <- function(
           axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
       }
 
-      if (refline)    # draws the reference line
-        abline(h = reftickvalue,  col = refline.col, lty = refline.lty, lwd = refline.lwd)
       
+      if (refline){# draws the reference line
+        if (!is.numeric(lwd.refline)) warning("'lwd.refline' must be numeric.")
+        abline(h = reftickvalue,  col = col.refline,  lty = lty.refline, lwd = lwd.refline)
+      }    
+
       if (is.null(args.legend)) {
         legend(x = legendlocation, legend = legendtext, col = col, lwd = lwd, 
                pch = pch, lty = lty, bty = "n", pt.cex = cex, pt.lwd = pt.lwd, pt.bg = bg)
