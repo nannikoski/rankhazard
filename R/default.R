@@ -17,7 +17,7 @@ rankhazardplot.default <- function(
     stop("'plottype' must be  'hazard' or 'loghazard'")
   if (!is.numeric(graphsbefore) || graphsbefore < 0) warning("'graphsbefore' must be a non-negative integer.")
   if (add && graphsbefore == 0) 
-    warning("When 'add = TRUE' the amount of already drawn graphs must be given by 'graphsbefore'.") #vaihda warning?
+    warning("When 'add = TRUE' the amount of already drawn graphs must be given by 'graphsbefore'.") 
   if(!is.null(draw.confint)) warning("'draw.confint can't be used without model object.")
   
   if(!is.null(confinterval)){
@@ -70,7 +70,7 @@ rankhazardplot.default <- function(
   pt.lwd <- rep(pt.lwd, length.out = m)
   
   if (!add && graphsbefore != 0)  warning("'graphsbefore' is not zero even though a new plot is drawn.")
-#browser()
+
     if (is.null(pch)){pch <- seq(0, m - 1) + graphsbefore} 		
     else{pch <- rep(pch, length.out = m)}							
     if (is.null(col)) {col <- 1:m + graphsbefore }				
@@ -177,7 +177,7 @@ rankhazardplot.default <- function(
       }
       
       if (!is.numeric(lwd.CI) || lwd.CI < 0) warning("'lwd.CI' must be a positive number.")
-#browser()      
+     
       matlines(x = scaleranks, y = low_ci_ord, type = "l", col = col.CI, lty = lty.CI, lwd = lwd.CI, ...) 
       matlines(x = scaleranks, y = upp_ci_ord, type = "l", col = col.CI, lty = lty.CI, lwd = lwd.CI, ...) 
       matpoints(quantiles, low_ci_points, pch = pch, col = col.CI, cex = cex, bg = bg, lwd = pt.lwd)
