@@ -1,5 +1,7 @@
 rankhazard_CI.cph <- function(cphobj,  x, refpoints, CI_level){
   
+  ### Calculates the values for the confidence intervals ###
+  
   factorlevels = cphobj$Design$parms
   covariatelabs = cphobj$Design$name
   

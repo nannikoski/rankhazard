@@ -1,6 +1,6 @@
 rankhazard_CI.coxph <- function(coxphobj, x, refpoints, CI_level){
   
-  ### Calculating the confidence intervals ###
+  ### Calculates the values for the confidence intervals ###
   
   factorlevels = coxphobj$xlevels
   covariatelabs = attr(coxphobj$terms, "term.labels")
