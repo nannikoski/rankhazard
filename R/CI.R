@@ -1,7 +1,7 @@
 rankhazard_CI <- function(modelobj, x, refpoints, factorlevels, covariatelabs, coefs){
   
   # This function calculates predictions as a product of coefs and x, and
-  # reference values as a product of coefs and refvalues.
+  # reference values as a product of coefs and refpoints.
   # Factors are given in a dummy format but returned as one variable.
   # The function returns data as x, predictions as xp, reference values as refvalues
   # and indices of covariates for which the predictions can be calculated by this function as
@@ -24,27 +24,20 @@ rankhazard_CI <- function(modelobj, x, refpoints, factorlevels, covariatelabs, c
   j <- 1
   for(i in factors){    # levels of factors are combined to one variable
     
-    if (columns[i] > 1)
-      xp[names(columns)[i]] <- apply(xp[, indices[i] + 0:(columns[i] - 1)], 1, sum) 
-    else xp[names(columns)[i]] <- xp[, indices[i]]
+    if (columns[i] > 1) # multiple-level factors
+      xp[factorlabs[j]] <- apply(xp[, indices[i] + 0:(columns[i] - 1)], 1, sum) 
+    else xp[factorlabs[j]] <- xp[, indices[i]] # two-level factors
     
-    for (l in 1:(columns[i])){   #the values of different levels are copied into same variable
+    for (l in 1:(columns[i]))   #the values of different levels are copied into same variable
       x[factorlabs[j]] <- ifelse(x[, indices[i] + l - 1] == 1, factorlevels[[j]][l + 1], x[, factorlabs[j]])
-    }
     #the cases with xp == 0 have the value of the reference level
     x[factorlabs[j]] <- ifelse(xp[, factorlabs[j]] == 0, factorlevels[[j]][1], x[, factorlabs[j]]) 
-    j <- j + 1
-  } 
-  
-  #the factors in the model are coerced as factors in x
-
-  j <- 1
-  for(i in factors) {
+    #the factors in the model are coerced as factors in x
     xfactor <- as.factor(x[, factorlabs[j]])
     x[factorlabs[j]] <- relevel(xfactor, ref = factorlevels[[j]][1])
     j <- j + 1
-  }
-  
+  } 
+
   covariatelabs <- covariatelabs[select]
   
   xp <- xp[covariatelabs] 		
