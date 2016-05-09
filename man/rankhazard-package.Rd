@@ -19,8 +19,8 @@ also compared using rank-hazard plots.
 \tabular{ll}{
 Package: \tab rankhazard\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2014-04-01\cr
+Version: \tab 1.1.0\cr
+Date: \tab 2016-04-01\cr
 License: \tab GPL 2\cr
 LazyLoad: \tab yes\cr
 }
@@ -30,7 +30,7 @@ The reference points for the relative hazards and legend texts can be provided a
 Plotting parameters such as, lwd, lty, col and pch are passed to the plotting commands.  
 }
 \author{
-Juha Karvanen <juha.karvanen@iki.fi> , Nanni Koski
+Juha Karvanen <juha.karvanen@iki.fi> , Nanni Koski <nanni.koski@gmail.com> 
 }
 \references{Karvanen J., Harrell F. E., Jr. 2009 Visualizing covariates in proportional hazards model. 
 \emph{Statistics in Medicine}, \bold{28}, 1957--1966.}
@@ -40,10 +40,10 @@ Juha Karvanen <juha.karvanen@iki.fi> , Nanni Koski
 \keyword{survival}
 \examples{
 library(survival)
-model <- coxph(Surv(time,status) ~ age + sex + ph.karno, data=cancer, x=TRUE)
+model <- coxph(Surv(time,status) ~ age + sex + ph.karno, data = cancer, x=TRUE)
 rankhazardplot(model, data=cancer)
 library(rms)
-model2 <- cph(Surv(time,status) ~ age + sex + ph.karno, data=cancer, x=TRUE)
+model2 <- cph(Surv(time,status) ~ age + sex + ph.karno, data = cancer, x=TRUE)
 dd <- datadist(cancer)
 options(datadist="dd")
 rankhazardplot(model2, data=cancer)

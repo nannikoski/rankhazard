@@ -1,15 +1,17 @@
 rankhazardplot <- function(...) UseMethod("rankhazardplot")
 
 rankhazardplot.default <- function(
-  x, coefs = NULL, xp = NULL, refvalues = NULL, refpoints = NULL,
-  confinterval = NULL, select = 1, legendtext = NULL, draw.confint = NULL, 
-  axistext = NULL, legendlocation = "top", axistextposition = -0.1, 
-  reftick = TRUE, refline = FALSE, col.refline = 1, lwd.refline = 1, 
-  lty.refline = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
-  yvalues = NULL, xtext =TRUE,  plottype = "hazard", na.rm = TRUE,
-  col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE,
-  cex = 1, bg = "transparent", pt.lwd = 1, 
-  col.CI = col, lty.CI = lty +1, lwd.CI = lwd, add = FALSE, graphsbefore = 0, args.legend = NULL, ...)				
+  x, coefs = NULL, xp = NULL, refvalues = NULL, 
+  refpoints = NULL, confinterval = NULL, select = 1, 
+  legendtext = NULL, axistext = NULL, legendlocation = "top", 
+  axistextposition = -0.1, reftick = TRUE, refline = FALSE, 
+  col.refline = 1, lwd.refline = 1, lty.refline = 2, 
+  ylab = NULL, ylim = NULL, yticks = NULL, yvalues = NULL,
+  xtext =TRUE,  plottype = "hazard",axes = TRUE, na.rm = TRUE,
+  col = NULL, lwd = 1, lty = 1, pch = NULL, cex = 1, 
+  bg = "transparent", pt.lwd = 1, draw.confint = NULL,
+  col.CI = col, lty.CI = lty +1, lwd.CI = lwd, add = FALSE, 
+  graphsbefore = 0, args.legend = NULL, ...)				
 {
   if (!identical(plottype, "hazard") && !identical(plottype, "loghazard")) 		
     stop("'plottype' must be  'hazard' or 'loghazard'.")
@@ -155,10 +157,18 @@ rankhazardplot.default <- function(
     rank_quantile[,i] <-quantile(1:(n - na_sum[i]), probs = quantiles)
     y_points[,i] <- y_ord[,i][rank_quantile[,i]]
   }
-
-  matplot(x = scaleranks, y = y_ord, type="l", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, xlab="", xaxt="n", yaxt = "n",
-          col=col, lty=lty, lwd=lwd, add = add, axes = axes, ...)
-  matpoints(quantiles, y_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
+  
+  if (!add){
+    matplot(1, 1, log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, xlab="", xaxt="n", yaxt = "n",type = "n",  axes = axes, ...)
+  
+    if (refline){# draws the reference line
+      if (!is.numeric(lwd.refline)) warning("'lwd.refline' must be numeric.")
+      abline(h = reftickvalue,  col = col.refline,  lty = lty.refline, lwd = lwd.refline)
+    }  
+  }
+  matplot(x = scaleranks, y = y_ord, type = 'l', col=col, lty=lty, lwd=lwd, add = TRUE, ylab="", xlab="", xaxt="n", yaxt = "n", ...)
+  #matplot(x = scaleranks, y = y_ord, type = 'l', col=col, lty=lty, lwd=lwd, add = add, xlab="", xaxt="n", yaxt = "n", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, axes = axes, ...)
+    matpoints(quantiles, y_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
     
   if (!is.null(confinterval)){
     low_ci_ord <- low_ci
@@ -189,7 +199,6 @@ rankhazardplot.default <- function(
               adj = c(1,rep(0.5, length(quantiles))), text = c(axistext[i], as.character(xlabels)), line = i + graphsbefore)
     }
   
-    
   if (!add){
     if (axes){
       axis(1, at = quantiles, labels = FALSE)    # marks ticks on x-axis
@@ -199,11 +208,6 @@ rankhazardplot.default <- function(
       if (reftick)    # eboldens the reference tick
         axis(2, at = reftickvalue, labels = FALSE, lwd.ticks = 2)
     }
-
-    if (refline){# draws the reference line
-      if (!is.numeric(lwd.refline)) warning("'lwd.refline' must be numeric.")
-      abline(h = reftickvalue,  col = col.refline,  lty = lty.refline, lwd = lwd.refline)
-    }    
 
     if (is.null(args.legend)){
       legend(x = legendlocation, legend = legendtext, col = col, lwd = lwd, 

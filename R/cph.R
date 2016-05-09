@@ -1,13 +1,15 @@
 rankhazardplot.cph <- function (
-  cphobj, data = NULL, select = NULL, refpoints = NULL, 
-  CI_level = 0.95, x_CI = NULL, draw.confint = FALSE, legendtext = NULL, 
-  axistext = NULL, legendlocation = "top", axistextposition = -0.1, 
-  reftick = TRUE, refline = FALSE, col.refline = 1, lwd.refline = 1, 
-  lty.refline = 2, ylab = NULL, ylim = NULL, yticks = NULL, 
-  yvalues = NULL, xtext =TRUE, plottype = "hazard", na.rm = TRUE, draw = TRUE, 
-  return = FALSE, col = NULL, lwd = 1, lty = 1, pch = NULL, axes = TRUE,
-  cex = 1, bg = "transparent", pt.lwd = 1, 
-  col.CI = col, lty.CI = lty +1, lwd.CI = lwd, add = FALSE, graphsbefore = 0, args.legend = NULL,  ...)					
+  cphobj, data, select = NULL, refpoints = NULL, 
+  CI_level = 0.95, x_CI = NULL, draw.confint = FALSE, 
+  legendtext = NULL, axistext = NULL, legendlocation = "top",
+  axistextposition = -0.1, reftick = TRUE, refline = FALSE, 
+  col.refline = 1, lwd.refline = 1, lty.refline = 2, 
+  ylab = NULL, ylim = NULL, yticks = NULL, yvalues = NULL, 
+  xtext =TRUE, plottype = "hazard", axes = TRUE, na.rm = TRUE,
+  draw = TRUE, return = FALSE, col = NULL, lwd = 1, lty = 1, 
+  pch = NULL, cex = 1, bg = "transparent", pt.lwd = 1, 
+  col.CI = col, lty.CI = lty +1, lwd.CI = lwd, add = FALSE, 
+  graphsbefore = 0, args.legend = NULL, ...)					
 {
   if (!is.data.frame(data)) 
     stop("Covariate data must be provided as a data frame by the argument 'data'.")
