@@ -167,8 +167,7 @@ rankhazardplot.default <- function(
     }  
   }
   matplot(x = scaleranks, y = y_ord, type = 'l', col=col, lty=lty, lwd=lwd, add = TRUE, ylab="", xlab="", xaxt="n", yaxt = "n", ...)
-  #matplot(x = scaleranks, y = y_ord, type = 'l', col=col, lty=lty, lwd=lwd, add = add, xlab="", xaxt="n", yaxt = "n", log=logvar, ylim=c(miny, maxy), xlim=c(0,1), ylab=ylab, axes = axes, ...)
-    matpoints(quantiles, y_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
+  matpoints(quantiles, y_points, pch=pch, col=col, cex=cex, bg=bg, lwd=pt.lwd)
     
   if (!is.null(confinterval)){
     low_ci_ord <- low_ci
