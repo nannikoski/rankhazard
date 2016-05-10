@@ -75,7 +75,7 @@ rankhazardplot.coxph <- function (
     # the defaults are replaced by the given refpoints
     if(is.numeric(refpoints)) refs[1, select[change]] <- refpoints[change]
     else{
-      refs[1, intersect(factors, select[change])] <- refpoints[is.element(select, intersect(factors, select[change]))] #kyllä tämä toimii
+      refs[1, intersect(factors, select[change])] <- refpoints[is.element(select, intersect(factors, select[change]))]
       refs[1, intersect(nonfactors, select[change])] <- as.numeric(refpoints[is.element(select, intersect(nonfactors, select[change]))])
     }
   }
