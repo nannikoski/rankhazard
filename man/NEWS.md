@@ -4,12 +4,12 @@ CHANGES IN rankhazard 1.1.0:
 
 Visible changes:
 
-* Plenty of new error and warning messages added.
-* A bug regarding the use of refpoints in certain 
-  situations is fixed.
-* Updated examples in the rankhazardplot documentation.
 * More flexibility for perfecting the look of the plot
   by new arguments.
+* Plenty of new error and warning messages added.
+* Updated examples in the rankhazardplot documentation.
+* A bug regarding the use of refpoints in some special
+  situations is fixed.
 
 Added arguments:
 
@@ -33,7 +33,7 @@ Non-visible changes:
 
 * The hidden functions coxph_CI and cph_CI are now hidden functions
   rankhazard_CI.coxph, rankhazard_CI.cph and rankhazard_CI and some 
-  of the code regarding the calculating of the confidence intervals
+  of the code regarding the calculation of the confidence intervals
   has been moved from rankhazardplot.coxph and rankhazardplot.cph
   into rankhazard_CI.coxph and rankhazard_CI.cph.
 * The plotting functions are matplot, matlines and matpoints instead

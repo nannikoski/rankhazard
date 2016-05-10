@@ -20,7 +20,7 @@ also compared using rank-hazard plots.
 Package: \tab rankhazard\cr
 Type: \tab Package\cr
 Version: \tab 1.1.0\cr
-Date: \tab 2016-04-01\cr
+Date: \tab 2016-05-10\cr
 License: \tab GPL 2\cr
 LazyLoad: \tab yes\cr
 }
