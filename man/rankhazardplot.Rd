@@ -400,7 +400,7 @@ rankhazardplot(coxmodel2, select = c(1, 5, 4), data = pbc,
 rankhazardplot(coxmodel2, select = c(1, 5, 4), data = pbc, 
                refline = TRUE, plottype = "loghazard", 
                col.refline = "darkblue", 
-               main = "Reference line at 0"))
+               main = "Reference line at 0")
                
 ### using graphical parameters ###
 
